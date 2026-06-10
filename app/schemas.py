@@ -9,6 +9,7 @@ class PropertyBase(BaseModel):
     city: str
     price: float
     status: Optional[str] = "a_vendre"
+    image_url: Optional[str] = None
 
 
 class PropertyCreate(PropertyBase):
@@ -37,6 +38,27 @@ class ClientCreate(ClientBase):
 
 
 class ClientRead(ClientBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ---------- Transaction ----------
+
+class TransactionBase(BaseModel):
+    property_id: int
+    client_id: int
+    price: float
+    date: str          # ex: "2026-06-09"
+    status: Optional[str] = "terminee"
+
+
+class TransactionCreate(TransactionBase):
+    pass
+
+
+class TransactionRead(TransactionBase):
     id: int
 
     class Config:

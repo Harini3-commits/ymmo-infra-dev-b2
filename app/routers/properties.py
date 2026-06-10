@@ -11,11 +11,15 @@ router = APIRouter(prefix="/properties", tags=["properties"])
 
 @router.post("/", response_model=schemas.PropertyRead)
 def create_property(property_in: schemas.PropertyCreate, db: Session = Depends(get_db)):
+    if property_in.price <= 0:
+        raise HTTPException(status_code=400, detail="Price must be greater than 0")
+
     db_property = models.Property(
         title=property_in.title,
         city=property_in.city,
         price=property_in.price,
         status=property_in.status,
+        image_url=property_in.image_url,
     )
     db.add(db_property)
     db.commit()
@@ -34,6 +38,27 @@ def get_property(property_id: int, db: Session = Depends(get_db)):
     prop = db.query(models.Property).filter(models.Property.id == property_id).first()
     if not prop:
         raise HTTPException(status_code=404, detail="Property not found")
+    return prop
+
+
+@router.put("/{property_id}", response_model=schemas.PropertyRead)
+def update_property(property_id: int, property_in: schemas.PropertyCreate, db: Session = Depends(get_db)):
+    prop = db.query(models.Property).filter(models.Property.id == property_id).first()
+    if not prop:
+        raise HTTPException(status_code=404, detail="Property not found")
+
+    if property_in.price <= 0:
+        raise HTTPException(status_code=400, detail="Price must be greater than 0")
+
+    prop.title = property_in.title
+    prop.city = property_in.city
+    prop.price = property_in.price
+    prop.status = property_in.status
+    prop.image_url = property_in.image_url
+
+    db.add(prop)
+    db.commit()
+    db.refresh(prop)
     return prop
 
 

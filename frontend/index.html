@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ymmo — Plateforme immobilière</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────── */
+    :root {
+      --navy:   #1A2333;
+      --slate:  #2E3D55;
+      --gold:   #C8953A;
+      --gold-lt:#E8B060;
+      --cream:  #F7F4EE;
+      --white:  #FFFFFF;
+      --muted:  #6B7A93;
+      --border: #DDD9D0;
+      --red:    #C0392B;
+      --green:  #27AE60;
+
+      --radius: 10px;
+      --shadow: 0 4px 24px rgba(26,35,51,.10);
+      --trans:  .2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ─────────────────────────────────── */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: .04em;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo span {
+      color: var(--gold);
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-count {
+      background: var(--gold);
+      color: var(--navy);
+      font-size: .7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── HERO STRIP ─────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,149,58,.22) 0%, transparent 70%);
+    }
+
+    .hero-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem;
+      color: var(--white);
+      line-height: 1.15;
+    }
+
+    .hero-text h1 em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .hero-text p {
+      margin-top: 8px;
+      color: rgba(255,255,255,.6);
+      font-size: .9rem;
+    }
+
+    .hero-kpis {
+      display: flex;
+      gap: 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kpi {
+      text-align: right;
+    }
+
+    .kpi-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--gold-lt);
+      line-height: 1;
+    }
+
+    .kpi-lbl {
+      font-size: .72rem;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: 2px;
+    }
+
+    /* ── GRID ───────────────────────────────────── */
+    .grid-two {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── CARD ───────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 20px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--navy);
+    }
+
+    .card-body {
+      padding: 20px 24px 24px;
+    }
+
+    /* ── FORM ───────────────────────────────────── */
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 5px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--navy);
+      background: var(--cream);
+      transition: border-color var(--trans), box-shadow var(--trans);
+      outline: none;
+      appearance: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(200,149,58,.18);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 11px 22px;
+      border: none;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--trans);
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-lt);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(200,149,58,.35);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    /* ── STATS GRID ─────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--gold);
+    }
+
+    .stat-card.blue  { border-left-color: #4A90D9; }
+    .stat-card.green { border-left-color: var(--green); }
+    .stat-card.red   { border-left-color: var(--red); }
+
+    .stat-label {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem;
+      color: var(--navy);
+      margin-top: 2px;
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── TABLE ──────────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 12px 16px;
+      background: var(--cream);
+      border-bottom: 2px solid var(--border);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background var(--trans);
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody tr:hover { background: #F7F4EE; }
+
+    tbody td {
+      padding: 13px 16px;
+      font-size: .88rem;
+      color: var(--navy);
+      vertical-align: middle;
+    }
+
+    .td-id {
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .td-title { font-weight: 500; }
+
+    .td-price {
+      font-weight: 600;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .prop-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prop-thumb {
+      width: 56px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #ddd;
+      flex-shrink: 0;
+    }
+
+    /* ── BADGES ─────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .badge-vendre  { background: #EBF5FF; color: #1A78C2; }
+    .badge-vendre::before { background: #1A78C2; }
+    .badge-vendu   { background: #EAFAF1; color: #1E8449; }
+    .badge-vendu::before  { background: #1E8449; }
+    .badge-louer   { background: #FEF9E7; color: #B7950B; }
+    .badge-louer::before  { background: #B7950B; }
+    .badge-loue    { background: #F5EEF8; color: #7D3C98; }
+    .badge-loue::before   { background: #7D3C98; }
+    .badge-default { background: var(--cream); color: var(--muted); }
+    .badge-default::before { background: var(--muted); }
+
+    /* ── TOAST ──────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--navy);
+      color: var(--white);
+      padding: 14px 22px;
+      border-radius: 9px;
+      font-size: .88rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all .35s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none;
+      border-left: 4px solid var(--gold);
+      z-index: 999;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── EMPTY STATE ────────────────────────────── */
+    .empty {
+      padding: 48px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .empty p {
+      font-size: .9rem;
+    }
+
+    /* ── DIVIDER ────────────────────────────────── */
+    .section-eyebrow {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 16px;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+      }
+      .hero-kpis {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .kpi { text-align: left; }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 580px) {
+      header { padding: 0 20px; }
+      main { padding: 20px 16px 60px; }
+      .hero { padding: 24px 20px; }
+      .hero-text h1 { font-size: 1.6rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    Ym<span>mo</span>
+  </div>
+  <div class="header-right">
+    <span class="badge-count" id="header-count">0 biens</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Gérez vos biens<br><em>en toute simplicité</em></h1>
+      <p>Plateforme interne — Groupe Ymmo</p>
+    </div>
+    <div class="hero-kpis">
+      <div class="kpi">
+        <div class="kpi-val" id="kpi-total">—</div>
+        <div class="kpi-lbl">Biens total</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val" id="kpi-avg">—</div>
+        <div class="kpi-lbl">Prix moyen</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val" id="kpi-villes">—</div>
+        <div class="kpi-lbl">Villes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats-grid" id="stats-strip">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid-two">
+
+    <!-- FORM CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Ajouter un bien</div>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Titre du bien</label>
+          <input type="text" id="title" placeholder="ex. Appartement T3 lumineux" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Ville</label>
+            <input type="text" id="city" placeholder="Paris" required>
+          </div>
+          <div class="field">
+            <label>Prix (€)</label>
+            <input type="number" id="price" placeholder="320000" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>URL de l'image</label>
+          <input type="text" id="image_url" placeholder="https://.../photo.jpg">
+        </div>
+        <div class="field">
+          <label>Statut</label>
+          <select id="status">
+            <option value="a_vendre">À vendre</option>
+            <option value="vendu">Vendu</option>
+            <option value="a_louer">À louer</option>
+            <option value="loue">Loué</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="submit-btn" onclick="handleSubmit()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter le bien
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div>
+      <div class="section-eyebrow">Inventaire</div>
+      <div class="card">
+        <div class="table-wrap">
+          <table id="properties-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Bien</th>
+                <th>Ville</th>
+                <th>Prix</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="properties-tbody">
+              <tr>
+                <td colspan="5">
+                  <div class="empty">
+                    <div class="empty-icon">🏠</div>
+                    <p>Aucun bien enregistré</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000";
+
+  /* ── UTILS ──────────────────────────────── */
+  function fmt(n) {
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+  }
+
+  function fmtCompact(n) {
+    if (n >= 1e6) return (n / 1e6).toFixed(1).replace('.', ',') + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(0) + 'k';
+    return n;
+  }
+
+  function statusBadge(s) {
+    const map = {
+      a_vendre: ['badge-vendre', 'À vendre'],
+      vendu:    ['badge-vendu',  'Vendu'],
+      a_louer:  ['badge-louer',  'À louer'],
+      loue:     ['badge-loue',   'Loué'],
+    };
+    const [cls, label] = map[s] || ['badge-default', s];
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ── FETCH PROPERTIES ───────────────────── */
+  async function fetchProperties() {
+    try {
+      const res = await fetch(`${API_BASE}/properties/`);
+      const data = await res.json();
+      renderProperties(data);
+      updateHeroKPIs(data);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function renderProperties(data) {
+    const tbody = document.getElementById('properties-tbody');
+    document.getElementById('header-count').textContent = `${data.length} bien${data.length !== 1 ? 's' : ''}`;
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">🏠</div><p>Aucun bien enregistré — ajoutez le premier ci-contre.</p></div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(p => `
+      <tr>
+        <td class="td-id">${p.id}</td>
+        <td class="td-title">
+          <div class="prop-main">
+            <img class="prop-thumb" src="${escHtml(p.image_url || '')}" onerror="this.style.visibility='hidden';" alt="">
+            <span>${escHtml(p.title)}</span>
+          </div>
+        </td>
+        <td>${escHtml(p.city)}</td>
+        <td class="td-price">${fmt(p.price)}</td>
+        <td>${statusBadge(p.status)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function updateHeroKPIs(data) {
+    document.getElementById('kpi-total').textContent = data.length;
+    if (data.length) {
+      const avg = data.reduce((s, p) => s + p.price, 0) / data.length;
+      document.getElementById('kpi-avg').textContent = fmtCompact(Math.round(avg)) + '€';
+      const villes = new Set(data.map(p => p.city)).size;
+      document.getElementById('kpi-villes').textContent = villes;
+    }
+  }
+
+  /* ── FETCH STATS ────────────────────────── */
+  async function fetchStats() {
+    try {
+      const res = await fetch(`${API_BASE}/stats/`);
+      const data = await res.json();
+      renderStats(data);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function renderStats(data) {
+    const strip = document.getElementById('stats-strip');
+    const entries = [
+      {
+        label: 'Biens total',
+        value: data.total_properties ?? '—',
+        cls: 'blue'
+      },
+      {
+        label: 'Biens vendus',
+        value: data.sold_properties ?? '—',
+        cls: 'green'
+      },
+      {
+        label: 'Transactions / CA',
+        value: (data.total_transactions ?? 0) + ' / ' + (data.total_revenue ?? 0),
+        cls: 'red'
+      }
+    ];
+
+    strip.innerHTML = entries.map(e => `
+      <div class="stat-card ${e.cls}">
+        <div class="stat-label">${e.label}</div>
+        <div class="stat-value">${e.value}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ── SUBMIT ─────────────────────────────── */
+  async function handleSubmit() {
+    const title   = document.getElementById('title').value.trim();
+    const city    = document.getElementById('city').value.trim();
+    const price   = parseFloat(document.getElementById('price').value);
+    const status  = document.getElementById('status').value;
+    const imageUrl = document.getElementById('image_url').value.trim() || null;
+
+    if (!title || !city || isNaN(price)) {
+      showToast('⚠️ Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Ajout en cours…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE}/properties/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
+        body: JSON.stringify({ title, city, price, status, image_url: imageUrl })
+      });
+
+      if (!res.ok) throw new Error();
+
+      document.getElementById('title').value    = '';
+      document.getElementById('city').value     = '';
+      document.getElementById('price').value    = '';
+      document.getElementById('image_url').value = '';
+      document.getElementById('status').value   = 'a_vendre';
+
+      showToast('✓ Bien ajouté avec succès');
+      fetchProperties();
+      fetchStats();
+    } catch {
+      showToast('✗ Erreur lors de l\'ajout');
+    } finally {
+      btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Ajouter le bien`;
+      btn.disabled = false;
+    }
+  }
+
+  /* ── SECURITY ───────────────────────────── */
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── INIT ───────────────────────────────── */
+  fetchProperties();
+  fetchStats();
+</script>
+</body>
+</html>
