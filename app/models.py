@@ -11,7 +11,8 @@ class Property(Base):
     city = Column(String, index=True)
     price = Column(Float)
     status = Column(String, default="a_vendre")  # a_vendre / vendu / a_louer / loue
-    image_url = Column(String, nullable=True)    # nouvelle colonne pour l'image
+    image_url = Column(String, nullable=True)    # URL d'image du bien
+    address = Column(String, nullable=True)      # nouvelle colonne : adresse complète
 
     # Relation avec Transaction (un bien peut avoir plusieurs transactions)
     transactions = relationship("Transaction", back_populates="property")
@@ -38,7 +39,7 @@ class Transaction(Base):
     property_id = Column(Integer, ForeignKey("properties.id"), nullable=False)
     client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
     price = Column(Float, nullable=False)
-    date = Column(String, nullable=False)  # pour aller vite : string (YYYY-MM-DD)
+    date = Column(String, nullable=False)  # string rapide, ex "2026-06-10"
     status = Column(String, default="terminee")  # terminee, en_cours, etc.
 
     # Relations vers Property et Client

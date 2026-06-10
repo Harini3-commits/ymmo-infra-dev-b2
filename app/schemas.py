@@ -10,6 +10,7 @@ class PropertyBase(BaseModel):
     price: float
     status: Optional[str] = "a_vendre"
     image_url: Optional[str] = None
+    address: Optional[str] = None   # nouvelle info d'adresse
 
 
 class PropertyCreate(PropertyBase):
@@ -20,7 +21,7 @@ class PropertyRead(PropertyBase):
     id: int
 
     class Config:
-        from_attributes = True  # lit les objets SQLAlchemy
+        from_attributes = True
 
 
 # ---------- Client ----------
@@ -50,7 +51,7 @@ class TransactionBase(BaseModel):
     property_id: int
     client_id: int
     price: float
-    date: str          # ex: "2026-06-09"
+    date: str          # ex: "2026-06-10"
     status: Optional[str] = "terminee"
 
 

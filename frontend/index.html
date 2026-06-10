@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ymmo — Plateforme immobilière</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
   <style>
     /* ── TOKENS ─────────────────────────────────── */
     :root {
@@ -305,7 +314,7 @@
       margin-top: 4px;
     }
 
-    /* ── TABLE ──────────────────────────────────── */
+    /* ── TABLE / LISTE ─────────────────────────── */
     .table-wrap {
       overflow-x: auto;
     }
@@ -350,14 +359,6 @@
       font-weight: 600;
     }
 
-    .td-title { font-weight: 500; }
-
-    .td-price {
-      font-weight: 600;
-      color: var(--navy);
-      white-space: nowrap;
-    }
-
     .prop-main {
       display: flex;
       align-items: center;
@@ -371,6 +372,27 @@
       object-fit: cover;
       background: #ddd;
       flex-shrink: 0;
+    }
+
+    .prop-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .prop-title {
+      font-weight: 500;
+    }
+
+    .prop-address {
+      font-size: .78rem;
+      color: var(--muted);
+    }
+
+    .td-price {
+      font-weight: 600;
+      color: var(--navy);
+      white-space: nowrap;
     }
 
     /* ── BADGES ─────────────────────────────────── */
@@ -454,6 +476,16 @@
       margin-bottom: 16px;
     }
 
+    /* ── MAP ───────────────────────────────────── */
+    #map {
+      width: 100%;
+      height: 320px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 22px;
+      overflow: hidden;
+    }
+
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 900px) {
       .grid-two {
@@ -531,6 +563,15 @@
     <!-- filled by JS -->
   </div>
 
+  <!-- MAP SECTION -->
+  <div class="card" style="margin-bottom: 28px; padding: 18px 20px 22px;">
+    <div class="card-title" style="margin-bottom: 8px;">Carte des biens</div>
+    <div style="font-size: 0.84rem; color: var(--muted); margin-bottom: 6px;">
+      Visualisation géographique des annonces (centres-villes principaux)
+    </div>
+    <div id="map"></div>
+  </div>
+
   <!-- MAIN GRID -->
   <div class="grid-two">
 
@@ -547,12 +588,16 @@
         <div class="field-row">
           <div class="field">
             <label>Ville</label>
-            <input type="text" id="city" placeholder="Paris" required>
+            <input type="text" id="city" placeholder="Lyon" required>
           </div>
           <div class="field">
             <label>Prix (€)</label>
             <input type="number" id="price" placeholder="320000" required>
           </div>
+        </div>
+        <div class="field">
+          <label>Adresse complète</label>
+          <input type="text" id="address" placeholder="12 Rue de la République, 69001 Lyon">
         </div>
         <div class="field">
           <label>URL de l'image</label>
@@ -610,6 +655,13 @@
 <!-- TOAST -->
 <div id="toast"></div>
 
+<!-- Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+
 <script>
   const API_BASE = "http://127.0.0.1:8000";
 
@@ -642,6 +694,66 @@
     setTimeout(() => t.classList.remove('show'), 2800);
   }
 
+  /* ── MAP / LEAFLET ─────────────────────────── */
+  let map = null;
+  let markersLayer = null;
+
+  // Mapping simple ville -> coordonnées (à compléter si besoin)
+  const CITY_COORDS = {
+    "Lyon":        [45.7640, 4.8357],
+    "Paris":       [48.8566, 2.3522],
+    "Marseille":   [43.2965, 5.3698],
+    "Bordeaux":    [44.8378, -0.5792],
+    "Lille":       [50.6292, 3.0573],
+    "Toulouse":    [43.6047, 1.4442],
+    "Nice":        [43.7102, 7.2620],
+    "Nantes":      [47.2184, -1.5536],
+    "Montpellier": [43.6108, 3.8767],
+  };
+
+  function initMap() {
+    const mapDiv = document.getElementById('map');
+    if (!mapDiv) return;
+
+    map = L.map('map').setView([46.5, 2.5], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    markersLayer = L.layerGroup().addTo(map);
+  }
+
+  function updateMapMarkers(properties) {
+    if (!map || !markersLayer) return;
+
+    markersLayer.clearLayers();
+    const bounds = [];
+
+    properties.forEach(p => {
+      const city = (p.city || '').trim();
+      if (!city || !CITY_COORDS[city]) return;
+
+      const [lat, lng] = CITY_COORDS[city];
+      const marker = L.marker([lat, lng]);
+
+      const popupHtml = `
+        <strong>${escHtml(p.title)}</strong><br/>
+        ${escHtml(p.address || city)}<br/>
+        ${fmt(p.price)}
+      `;
+
+      marker.bindPopup(popupHtml);
+      marker.addTo(markersLayer);
+      bounds.push([lat, lng]);
+    });
+
+    if (bounds.length) {
+      map.fitBounds(bounds, { padding: [30, 30] });
+    }
+  }
+
   /* ── FETCH PROPERTIES ───────────────────── */
   async function fetchProperties() {
     try {
@@ -660,16 +772,20 @@
 
     if (!data.length) {
       tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">🏠</div><p>Aucun bien enregistré — ajoutez le premier ci-contre.</p></div></td></tr>`;
+      updateMapMarkers([]);
       return;
     }
 
     tbody.innerHTML = data.map(p => `
       <tr>
         <td class="td-id">${p.id}</td>
-        <td class="td-title">
+        <td>
           <div class="prop-main">
             <img class="prop-thumb" src="${escHtml(p.image_url || '')}" onerror="this.style.visibility='hidden';" alt="">
-            <span>${escHtml(p.title)}</span>
+            <div class="prop-text">
+              <span class="prop-title">${escHtml(p.title)}</span>
+              <span class="prop-address">${escHtml(p.address || '')}</span>
+            </div>
           </div>
         </td>
         <td>${escHtml(p.city)}</td>
@@ -677,6 +793,8 @@
         <td>${statusBadge(p.status)}</td>
       </tr>
     `).join('');
+
+    updateMapMarkers(data);
   }
 
   function updateHeroKPIs(data) {
@@ -730,14 +848,15 @@
 
   /* ── SUBMIT ─────────────────────────────── */
   async function handleSubmit() {
-    const title   = document.getElementById('title').value.trim();
-    const city    = document.getElementById('city').value.trim();
-    const price   = parseFloat(document.getElementById('price').value);
-    const status  = document.getElementById('status').value;
+    const title    = document.getElementById('title').value.trim();
+    const city     = document.getElementById('city').value.trim();
+    const price    = parseFloat(document.getElementById('price').value);
+    const address  = document.getElementById('address').value.trim() || null;
     const imageUrl = document.getElementById('image_url').value.trim() || null;
+    const status   = document.getElementById('status').value;
 
     if (!title || !city || isNaN(price)) {
-      showToast('⚠️ Veuillez remplir tous les champs obligatoires');
+      showToast('⚠️ Veuillez remplir au minimum titre, ville et prix');
       return;
     }
 
@@ -749,16 +868,17 @@
       const res = await fetch(`${API_BASE}/properties/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
-        body: JSON.stringify({ title, city, price, status, image_url: imageUrl })
+        body: JSON.stringify({ title, city, price, status, image_url: imageUrl, address })
       });
 
       if (!res.ok) throw new Error();
 
-      document.getElementById('title').value    = '';
-      document.getElementById('city').value     = '';
-      document.getElementById('price').value    = '';
+      document.getElementById('title').value     = '';
+      document.getElementById('city').value      = '';
+      document.getElementById('price').value     = '';
+      document.getElementById('address').value   = '';
       document.getElementById('image_url').value = '';
-      document.getElementById('status').value   = 'a_vendre';
+      document.getElementById('status').value    = 'a_vendre';
 
       showToast('✓ Bien ajouté avec succès');
       fetchProperties();
@@ -777,6 +897,7 @@
   }
 
   /* ── INIT ───────────────────────────────── */
+  initMap();
   fetchProperties();
   fetchStats();
 </script>

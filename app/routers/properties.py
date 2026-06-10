@@ -20,6 +20,7 @@ def create_property(property_in: schemas.PropertyCreate, db: Session = Depends(g
         price=property_in.price,
         status=property_in.status,
         image_url=property_in.image_url,
+        address=property_in.address,
     )
     db.add(db_property)
     db.commit()
@@ -55,6 +56,7 @@ def update_property(property_id: int, property_in: schemas.PropertyCreate, db: S
     prop.price = property_in.price
     prop.status = property_in.status
     prop.image_url = property_in.image_url
+    prop.address = property_in.address
 
     db.add(prop)
     db.commit()
