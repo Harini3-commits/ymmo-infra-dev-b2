@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ymmo — Plateforme immobilière</title>
+  <title>Ymmo — Portefeuille de biens</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS -->
@@ -15,433 +15,737 @@
   />
 
   <style>
-    /* ── TOKENS ─────────────────────────────────── */
+    /* ── PALETTE LUXE ───────────────────────────── */
     :root {
-      --navy:   #1A2333;
-      --slate:  #2E3D55;
-      --gold:   #C8953A;
-      --gold-lt:#E8B060;
-      --cream:  #F7F4EE;
-      --white:  #FFFFFF;
-      --muted:  #6B7A93;
-      --border: #DDD9D0;
-      --red:    #C0392B;
-      --green:  #27AE60;
+      --bg-body:      #F5F2EC;
+      --bg-hero:      #F0E8DC;
+      --bg-card:      #FFFFFF;
+      --bg-chip:      #F7F1E6;
 
-      --radius: 10px;
-      --shadow: 0 4px 24px rgba(26,35,51,.10);
-      --trans:  .2s ease;
+      --text-main:    #1F2933;
+      --text-muted:   #7C828F;
+      --text-soft:    #A3A7B4;
+
+      --accent:       #C8A66A;
+      --accent-soft:  #E3D2A4;
+      --accent-dark:  #8C6E3A;
+
+      --border-soft:  #E4DFD5;
+      --shadow-soft:  0 18px 45px rgba(31, 41, 51, 0.08);
+
+      --radius-lg:    18px;
+      --radius-md:    14px;
+      --radius-sm:    999px;
+
+      --trans:        .22s ease;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--cream);
-      color: var(--navy);
+      background: radial-gradient(circle at top left, #F9F5EE 0, #F3EFE7 40%, #EEE9E1 100%);
+      color: var(--text-main);
       min-height: 100vh;
     }
 
-    /* ── TOPBAR ─────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────── */
     header {
-      background: var(--navy);
-      color: var(--white);
+      max-width: 1180px;
+      margin: 18px auto 0;
+      padding: 10px 20px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
-      height: 64px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
 
     .logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem;
-      letter-spacing: .04em;
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo span {
-      color: var(--gold);
-    }
-
-    .logo-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .badge-count {
-      background: var(--gold);
-      color: var(--navy);
-      font-size: .7rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 20px;
-    }
-
-    /* ── LAYOUT ─────────────────────────────────── */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    /* ── HERO STRIP ─────────────────────────────── */
-    .hero {
-      background: var(--navy);
-      border-radius: var(--radius);
-      padding: 36px 40px;
-      margin-bottom: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(200,149,58,.22) 0%, transparent 70%);
-    }
-
-    .hero-text h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.2rem;
-      color: var(--white);
-      line-height: 1.15;
-    }
-
-    .hero-text h1 em {
-      font-style: italic;
-      color: var(--gold-lt);
-    }
-
-    .hero-text p {
-      margin-top: 8px;
-      color: rgba(255,255,255,.6);
-      font-size: .9rem;
-    }
-
-    .hero-kpis {
-      display: flex;
-      gap: 36px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .kpi {
-      text-align: right;
-    }
-
-    .kpi-val {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2rem;
-      color: var(--gold-lt);
-      line-height: 1;
-    }
-
-    .kpi-lbl {
-      font-size: .72rem;
-      color: rgba(255,255,255,.5);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-top: 2px;
-    }
-
-    /* ── GRID ───────────────────────────────────── */
-    .grid-two {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 28px;
-      align-items: start;
-    }
-
-    /* ── CARD ───────────────────────────────────── */
-    .card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .card-header {
-      padding: 20px 24px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.15rem;
-      color: var(--navy);
-    }
-
-    .card-body {
-      padding: 20px 24px 24px;
-    }
-
-    /* ── FORM ───────────────────────────────────── */
-    .field {
-      margin-bottom: 14px;
-    }
-
-    .field label {
-      display: block;
-      font-size: .78rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 5px;
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      font-family: inherit;
-      font-size: .9rem;
-      color: var(--navy);
-      background: var(--cream);
-      transition: border-color var(--trans), box-shadow var(--trans);
-      outline: none;
-      appearance: none;
-    }
-
-    .field input:focus,
-    .field select:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(200,149,58,.18);
-    }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 11px 22px;
-      border: none;
-      border-radius: 7px;
-      font-family: inherit;
-      font-size: .88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--trans);
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--navy);
-      width: 100%;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-lt);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(200,149,58,.35);
-    }
-
-    .btn-primary:active { transform: translateY(0); }
-
-    /* ── STATS GRID ─────────────────────────────── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--gold);
-    }
-
-    .stat-card.blue  { border-left-color: #4A90D9; }
-    .stat-card.green { border-left-color: var(--green); }
-    .stat-card.red   { border-left-color: var(--red); }
-
-    .stat-label {
-      font-size: .72rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-    }
-
-    .stat-value {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.75rem;
-      color: var(--navy);
-      margin-top: 2px;
-      line-height: 1;
-    }
-
-    .stat-sub {
-      font-size: .75rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* ── TABLE / LISTE ─────────────────────────── */
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead th {
-      font-size: .72rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      padding: 12px 16px;
-      background: var(--cream);
-      border-bottom: 2px solid var(--border);
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background var(--trans);
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody tr:hover { background: #F7F4EE; }
-
-    tbody td {
-      padding: 13px 16px;
-      font-size: .88rem;
-      color: var(--navy);
-      vertical-align: middle;
-    }
-
-    .td-id {
-      font-size: .75rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .prop-main {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .prop-thumb {
-      width: 56px;
-      height: 40px;
-      border-radius: 6px;
-      object-fit: cover;
-      background: #ddd;
-      flex-shrink: 0;
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #FDF7EC 0, #D8B984 35%, #B38D55 100%);
+      box-shadow: 0 10px 25px rgba(0,0,0,.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
     }
 
-    .prop-text {
+    .logo-text-main {
+      font-family: 'DM Serif Display', serif;
+      letter-spacing: .12em;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+    }
+
+    .logo-text-sub {
+      font-size: .78rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-size: .8rem;
+      color: var(--text-soft);
+    }
+
+    .header-agent {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .header-pill {
+      background: rgba(255,255,255,0.8);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      border: 1px solid rgba(200,166,106,0.25);
+      font-size: .72rem;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .header-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── MAIN LAYOUT ───────────────────────────── */
+    main {
+      max-width: 1180px;
+      margin: 16px auto 40px;
+      padding: 0 20px;
+    }
+
+    /* ── HERO ───────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(244,236,225,0.9));
+      border-radius: 26px;
+      padding: 26px 26px 26px 26px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: 2.1fr 2fr;
+      gap: 22px;
+      border: 1px solid rgba(255,255,255,0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -30px;
+      top: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,166,106,0.32) 0, transparent 70%);
+      opacity: .9;
+    }
+
+    .hero-left {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .24em;
+      color: var(--accent-dark);
+      margin-bottom: 6px;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .hero-title span {
+      color: var(--accent-dark);
+    }
+
+    .hero-sub {
+      font-size: .9rem;
+      color: var(--text-muted);
+    }
+
+    .hero-badges {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-size: .75rem;
+      color: var(--text-soft);
+      border: 1px solid rgba(228,223,213,0.8);
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .kpis {
+      display: flex;
+      gap: 14px;
+    }
+
+    .kpi {
+      background: rgba(255,255,255,0.9);
+      border-radius: 18px;
+      padding: 10px 13px;
+      min-width: 110px;
+      border: 1px solid rgba(228,223,213,0.9);
+    }
+
+    .kpi-label {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--text-soft);
+      margin-bottom: 3px;
+    }
+
+    .kpi-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--text-main);
+    }
+
+    .hero-note {
+      font-size: .78rem;
+      color: var(--text-soft);
+      max-width: 230px;
+      text-align: right;
+    }
+
+    /* ── SECTION WRAPS ─────────────────────────── */
+    .section-row {
+      display: grid;
+      grid-template-columns: 1.6fr 2.2fr;
+      gap: 22px;
+      margin-top: 26px;
+      align-items: flex-start;
+    }
+
+    /* ── CARD BASE ─────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px 18px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--text-main);
+    }
+
+    .card-subtitle {
+      font-size: .8rem;
+      color: var(--text-soft);
+    }
+
+    /* ── MAP ───────────────────────────────────── */
+    #map {
+      width: 100%;
+      height: 260px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid rgba(228,223,213,0.9);
+    }
+
+    /* ── FORM ──────────────────────────────────── */
+    .form {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--text-soft);
+    }
+
+    .field-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .field-row-three {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      border-radius: 10px;
+      border: 1px solid rgba(228,223,213,0.9);
+      background: #F8F4EE;
+      padding: 9px 11px;
+      font-family: inherit;
+      font-size: .88rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color var(--trans), box-shadow var(--trans), background var(--trans);
+    }
+
+    .textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: var(--accent);
+      background: #FFFDF7;
+      box-shadow: 0 0 0 2px rgba(200,166,106,0.25);
+    }
+
+    .btn-primary {
+      margin-top: 4px;
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: none;
+      outline: none;
+      background: linear-gradient(135deg, #D3B57A, #C49859);
+      color: #2B2215;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 14px 30px rgba(152,119,63,0.35);
+      transition: transform var(--trans), box-shadow var(--trans), filter var(--trans);
+      width: fit-content;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+      box-shadow: 0 18px 40px rgba(152,119,63,0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 20px rgba(152,119,63,0.3);
+    }
+
+    /* ── PROPERTIES GRID ───────────────────────── */
+    .properties-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .properties-count {
+      font-size: .8rem;
+      color: var(--text-soft);
+    }
+
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .property-card {
+      background: linear-gradient(145deg, #FFFFFF, #F8F3EA);
+      border-radius: 18px;
+      border: 1px solid rgba(228,223,213,0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans), filter var(--trans);
+      cursor: pointer;
+    }
+
+    .property-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px rgba(31,41,51,0.12);
+      border-color: rgba(200,166,106,0.7);
+    }
+
+    .property-image-wrap {
+      position: relative;
+      height: 150px;
+      overflow: hidden;
+    }
+
+    .property-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.03);
+      transition: transform .35s ease;
+    }
+
+    .property-card:hover .property-image {
+      transform: scale(1.06);
+    }
+
+    .property-pill {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: .72rem;
+      background: rgba(0,0,0,0.45);
+      color: #FFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .property-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ADE80;
+    }
+
+    .property-body {
+      padding: 10px 12px 12px;
+      display: grid;
+      grid-template-columns: 1.9fr auto;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .property-main {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .prop-title {
-      font-weight: 500;
-    }
-
-    .prop-address {
-      font-size: .78rem;
-      color: var(--muted);
-    }
-
-    .td-price {
+    .property-title {
       font-weight: 600;
-      color: var(--navy);
+      font-size: .9rem;
+      color: var(--text-main);
+    }
+
+    .property-address {
+      font-size: .78rem;
+      color: var(--text-soft);
+    }
+
+    .property-city-type {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .property-meta {
+      font-size: .76rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+
+    .property-price {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: var(--accent-dark);
+      text-align: right;
       white-space: nowrap;
     }
 
-    /* ── BADGES ─────────────────────────────────── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 20px;
+    .property-status-pill {
+      margin-top: 2px;
       font-size: .72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .05em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(200,166,106,0.4);
+      color: var(--accent-dark);
+      background: rgba(249,244,233,0.9);
+      text-align: right;
     }
 
-    .badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
+    .status-vendu {
+      border-color: rgba(46,204,113,0.5);
+      color: #1E824C;
+      background: rgba(236,253,245,0.95);
+      filter: grayscale(0.15);
+    }
+
+    .status-loue {
+      border-color: rgba(91,107,192,0.5);
+      color: #3F51B5;
+      background: rgba(235,244,255,0.95);
+      filter: grayscale(0.15);
+    }
+
+    .card-sold,
+    .card-rented {
+      filter: grayscale(0.12);
+    }
+
+    .properties-empty {
+      padding: 40px 12px;
+      text-align: center;
+      color: var(--text-soft);
+      font-size: .86rem;
+    }
+
+    /* ── MODAL DETAIL ──────────────────────────── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 900;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #FFFFFF;
+      border-radius: 24px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 88vh;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.45);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-image-wrap {
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent 55%);
+    }
+
+    .modal-top-info {
+      position: absolute;
+      left: 20px;
+      bottom: 16px;
+      color: #FFF;
+    }
+
+    .modal-top-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+    }
+
+    .modal-top-address {
+      font-size: .85rem;
+      opacity: .9;
+      margin-top: 2px;
+    }
+
+    .modal-top-price {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      background: rgba(0,0,0,0.58);
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .modal-body {
+      padding: 16px 18px 18px;
+      display: grid;
+      grid-template-columns: 1.9fr 1.4fr;
+      gap: 18px;
+    }
+
+    .modal-section-title {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .modal-description {
+      font-size: .9rem;
+      color: var(--text-main);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .modal-metas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .meta-pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #F7F1E6;
+      font-size: .78rem;
+      color: var(--text-muted);
+    }
+
+    .modal-right-block {
+      background: #F8F4EE;
+      border-radius: 16px;
+      padding: 10px 12px 12px;
+      border: 1px solid rgba(228,223,213,0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .availability-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 500;
+    }
+
+    .availability-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
     }
 
-    .badge-vendre  { background: #EBF5FF; color: #1A78C2; }
-    .badge-vendre::before { background: #1A78C2; }
-    .badge-vendu   { background: #EAFAF1; color: #1E8449; }
-    .badge-vendu::before  { background: #1E8449; }
-    .badge-louer   { background: #FEF9E7; color: #B7950B; }
-    .badge-louer::before  { background: #B7950B; }
-    .badge-loue    { background: #F5EEF8; color: #7D3C98; }
-    .badge-loue::before   { background: #7D3C98; }
-    .badge-default { background: var(--cream); color: var(--muted); }
-    .badge-default::before { background: var(--muted); }
+    .avail-ok {
+      background: #E7F8EC;
+      color: #166534;
+    }
+
+    .avail-ok .availability-dot {
+      background: #16A34A;
+    }
+
+    .avail-no {
+      background: #FEE2E2;
+      color: #B91C1C;
+    }
+
+    .avail-no .availability-dot {
+      background: #DC2626;
+    }
+
+    .modal-status-text {
+      font-size: .82rem;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(0,0,0,0.5);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
     /* ── TOAST ──────────────────────────────────── */
     #toast {
       position: fixed;
-      bottom: 32px;
-      right: 32px;
-      background: var(--navy);
-      color: var(--white);
-      padding: 14px 22px;
-      border-radius: 9px;
-      font-size: .88rem;
-      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+      bottom: 26px;
+      right: 26px;
+      background: #111827;
+      color: #F9FAFB;
+      padding: 11px 16px;
+      border-radius: 999px;
+      font-size: .85rem;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
       transform: translateY(80px);
       opacity: 0;
       transition: all .35s cubic-bezier(.34,1.56,.64,1);
       pointer-events: none;
-      border-left: 4px solid var(--gold);
+      border: 1px solid rgba(200,166,106,0.65);
       z-index: 999;
     }
 
@@ -450,69 +754,40 @@
       opacity: 1;
     }
 
-    /* ── EMPTY STATE ────────────────────────────── */
-    .empty {
-      padding: 48px 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .empty-icon {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    .empty p {
-      font-size: .9rem;
-    }
-
-    /* ── DIVIDER ────────────────────────────────── */
-    .section-eyebrow {
-      font-size: .72rem;
-      font-weight: 600;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: 16px;
-    }
-
-    /* ── MAP ───────────────────────────────────── */
-    #map {
-      width: 100%;
-      height: 320px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-top: 22px;
-      overflow: hidden;
-    }
-
     /* ── RESPONSIVE ─────────────────────────────── */
-    @media (max-width: 900px) {
-      .grid-two {
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .hero-note { text-align: left; }
+      .kpis { justify-content: flex-start; }
+      .section-row {
+        grid-template-columns: 1fr;
+      }
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      main { padding: 0 14px; }
+      header { padding: 0 14px; }
+      .properties-grid {
         grid-template-columns: 1fr;
       }
       .hero {
-        flex-direction: column;
-        gap: 24px;
-        align-items: flex-start;
+        padding: 20px 18px;
       }
-      .hero-kpis {
-        width: 100%;
-        justify-content: space-between;
+      .modal {
+        max-width: 95vw;
       }
-      .kpi { text-align: left; }
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
+      .modal-image-wrap {
+        height: 220px;
       }
-    }
-
-    @media (max-width: 580px) {
-      header { padding: 0 20px; }
-      main { padding: 20px 16px 60px; }
-      .hero { padding: 24px 20px; }
-      .hero-text h1 { font-size: 1.6rem; }
-      .stats-grid { grid-template-columns: 1fr; }
-      .field-row { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -522,138 +797,217 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
-    <span class="logo-dot"></span>
-    Ym<span>mo</span>
+    <div class="logo-mark">Y</div>
+    <div>
+      <div class="logo-text-main">YMMO</div>
+      <div class="logo-text-sub">Portefeuille résidentiel & prestige</div>
+    </div>
   </div>
   <div class="header-right">
-    <span class="badge-count" id="header-count">0 biens</span>
+    <div class="header-agent">Conseiller·e : Portefeuille Ymmo</div>
+    <div class="header-pill">
+      <span class="header-pill-dot"></span>
+      <span id="header-count">0 bien</span>
+    </div>
   </div>
 </header>
 
-<!-- MAIN -->
 <main>
-
   <!-- HERO -->
-  <div class="hero">
-    <div class="hero-text">
-      <h1>Gérez vos biens<br><em>en toute simplicité</em></h1>
-      <p>Plateforme interne — Groupe Ymmo</p>
-    </div>
-    <div class="hero-kpis">
-      <div class="kpi">
-        <div class="kpi-val" id="kpi-total">—</div>
-        <div class="kpi-lbl">Biens total</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-val" id="kpi-avg">—</div>
-        <div class="kpi-lbl">Prix moyen</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-val" id="kpi-villes">—</div>
-        <div class="kpi-lbl">Villes</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STATS STRIP -->
-  <div class="stats-grid" id="stats-strip">
-    <!-- filled by JS -->
-  </div>
-
-  <!-- MAP SECTION -->
-  <div class="card" style="margin-bottom: 28px; padding: 18px 20px 22px;">
-    <div class="card-title" style="margin-bottom: 8px;">Carte des biens</div>
-    <div style="font-size: 0.84rem; color: var(--muted); margin-bottom: 6px;">
-      Visualisation géographique des annonces (centres-villes principaux)
-    </div>
-    <div id="map"></div>
-  </div>
-
-  <!-- MAIN GRID -->
-  <div class="grid-two">
-
-    <!-- FORM CARD -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Ajouter un bien</div>
-      </div>
-      <div class="card-body">
-        <div class="field">
-          <label>Titre du bien</label>
-          <input type="text" id="title" placeholder="ex. Appartement T3 lumineux" required>
+  <section class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">Ymmo • Portefeuille</div>
+      <h1 class="hero-title">
+        Biens d’exception,<br>
+        <span>vue d’ensemble instantanée.</span>
+      </h1>
+      <p class="hero-sub">
+        Une interface pensée pour les conseillers Ymmo : suivez en temps réel vos biens à la vente, vos exclusivités et vos transactions clés.
+      </p>
+      <div class="hero-badges">
+        <div class="chip">
+          <span class="chip-dot"></span>
+          Vue synthétique du portefeuille
         </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Ville</label>
-            <input type="text" id="city" placeholder="Lyon" required>
-          </div>
-          <div class="field">
-            <label>Prix (€)</label>
-            <input type="number" id="price" placeholder="320000" required>
-          </div>
+        <div class="chip">
+          Transactions & CA consolidés
         </div>
-        <div class="field">
-          <label>Adresse complète</label>
-          <input type="text" id="address" placeholder="12 Rue de la République, 69001 Lyon">
+        <div class="chip">
+          Carte interactive des biens
         </div>
-        <div class="field">
-          <label>URL de l'image</label>
-          <input type="text" id="image_url" placeholder="https://.../photo.jpg">
-        </div>
-        <div class="field">
-          <label>Statut</label>
-          <select id="status">
-            <option value="a_vendre">À vendre</option>
-            <option value="vendu">Vendu</option>
-            <option value="a_louer">À louer</option>
-            <option value="loue">Loué</option>
-          </select>
-        </div>
-        <button class="btn btn-primary" id="submit-btn" onclick="handleSubmit()">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          Ajouter le bien
-        </button>
       </div>
     </div>
+    <div class="hero-right">
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Biens</div>
+          <div class="kpi-value" id="kpi-total">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Prix moyen</div>
+          <div class="kpi-value" id="kpi-avg">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Villes</div>
+          <div class="kpi-value" id="kpi-villes">—</div>
+        </div>
+      </div>
+      <p class="hero-note">
+        Les indicateurs sont calculés en direct à partir de la base Ymmo (API FastAPI + SQLite).
+      </p>
+    </div>
+  </section>
 
-    <!-- TABLE CARD -->
+  <!-- SECTIONS : MAP + FORM / PROPERTIES -->
+  <section class="section-row">
+    <!-- GAUCHE : CARTE + FORM -->
     <div>
-      <div class="section-eyebrow">Inventaire</div>
       <div class="card">
-        <div class="table-wrap">
-          <table id="properties-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Bien</th>
-                <th>Ville</th>
-                <th>Prix</th>
-                <th>Statut</th>
-              </tr>
-            </thead>
-            <tbody id="properties-tbody">
-              <tr>
-                <td colspan="5">
-                  <div class="empty">
-                    <div class="empty-icon">🏠</div>
-                    <p>Aucun bien enregistré</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card-header">
+          <div>
+            <div class="card-title">Vue d’ensemble</div>
+            <div class="card-subtitle">Position de vos biens par ville principale</div>
+          </div>
+        </div>
+        <div id="map"></div>
+      </div>
+
+      <div class="card" style="margin-top: 16px;">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Ajouter un bien</div>
+            <div class="card-subtitle">Renseignez les informations clés du bien</div>
+          </div>
+        </div>
+        <div class="form">
+          <div class="field">
+            <label class="field-label">Titre du bien</label>
+            <input class="input" type="text" id="title" placeholder="Appartement haussmannien, 6e — Vue Tour Eiffel">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Ville</label>
+              <input class="input" type="text" id="city" placeholder="Paris">
+            </div>
+            <div class="field">
+              <label class="field-label">Prix (€)</label>
+              <input class="input" type="number" id="price" placeholder="1450000">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Adresse complète</label>
+            <input class="input" type="text" id="address" placeholder="15 Rue de Rivoli, 75004 Paris">
+          </div>
+          <div class="field-row-three">
+            <div class="field">
+              <label class="field-label">Surface (m²)</label>
+              <input class="input" type="number" id="surface" placeholder="95">
+            </div>
+            <div class="field">
+              <label class="field-label">Chambres</label>
+              <input class="input" type="number" id="bedrooms" placeholder="3">
+            </div>
+            <div class="field">
+              <label class="field-label">Salles d’eau</label>
+              <input class="input" type="number" id="bathrooms" placeholder="2">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Type de bien</label>
+              <select class="select" id="type">
+                <option value="">—</option>
+                <option value="appartement">Appartement</option>
+                <option value="maison">Maison</option>
+                <option value="studio">Studio</option>
+                <option value="villa">Villa</option>
+                <option value="loft">Loft</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label">Statut</label>
+              <select class="select" id="status">
+                <option value="a_vendre">À vendre</option>
+                <option value="vendu">Vendu</option>
+                <option value="a_louer">À louer</option>
+                <option value="loue">Loué</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">URL de l’image</label>
+            <input class="input" type="text" id="image_url" placeholder="https://.../photo.jpg">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Latitude (optionnel)</label>
+              <input class="input" type="number" step="0.000001" id="lat" placeholder="48.8566">
+            </div>
+            <div class="field">
+              <label class="field-label">Longitude (optionnel)</label>
+              <input class="input" type="number" step="0.000001" id="lng" placeholder="2.3522">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Description</label>
+            <textarea class="textarea" id="description" placeholder="Au dernier étage d'un immeuble haussmannien, vue dégagée et lumière traversante."></textarea>
+          </div>
+          <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            Ajouter le bien au portefeuille
+          </button>
         </div>
       </div>
     </div>
 
-  </div>
+    <!-- DROITE : PROPERTIES GRID -->
+    <div class="card">
+      <div class="properties-header">
+        <div class="card-title">Portefeuille de biens</div>
+        <div class="properties-count" id="properties-count-label">0 bien</div>
+      </div>
+      <div id="properties-container">
+        <div class="properties-empty">
+          Aucun bien enregistré pour le moment. Ajoutez un premier bien à gauche pour constituer votre portefeuille.
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<!-- TOAST -->
 <div id="toast"></div>
+
+<!-- MODAL DETAIL -->
+<div class="modal-backdrop" id="detail-backdrop" onclick="backdropClick(event)">
+  <div class="modal" id="detail-modal">
+    <div class="modal-image-wrap">
+      <img class="modal-image" id="detail-image" src="" alt="">
+      <div class="modal-image-overlay"></div>
+      <div class="modal-top-info">
+        <div class="modal-top-title" id="detail-title"></div>
+        <div class="modal-top-address" id="detail-address"></div>
+      </div>
+      <div class="modal-top-price" id="detail-price"></div>
+      <button class="modal-close-btn" onclick="closeDetail()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-title">Description</div>
+        <div class="modal-description" id="detail-description"></div>
+        <div class="modal-section-title" style="margin-top: 12px;">Caractéristiques</div>
+        <div class="modal-metas" id="detail-metas"></div>
+      </div>
+      <div class="modal-right-block">
+        <div class="modal-section-title">Disponibilité</div>
+        <div id="detail-availability"></div>
+        <div class="modal-section-title" style="margin-top: 8px;">Localisation</div>
+        <div class="modal-status-text" id="detail-location-text"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Leaflet JS -->
 <script
@@ -664,6 +1018,8 @@
 
 <script>
   const API_BASE = "http://127.0.0.1:8000";
+
+  let currentProperties = [];
 
   /* ── UTILS ──────────────────────────────── */
   function fmt(n) {
@@ -676,29 +1032,26 @@
     return n;
   }
 
-  function statusBadge(s) {
-    const map = {
-      a_vendre: ['badge-vendre', 'À vendre'],
-      vendu:    ['badge-vendu',  'Vendu'],
-      a_louer:  ['badge-louer',  'À louer'],
-      loue:     ['badge-loue',   'Loué'],
-    };
-    const [cls, label] = map[s] || ['badge-default', s];
-    return `<span class="badge ${cls}">${label}</span>`;
-  }
-
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
   }
 
   /* ── MAP / LEAFLET ─────────────────────────── */
   let map = null;
   let markersLayer = null;
+  const propertyMarkers = new Map(); // id -> marker
 
-  // Mapping simple ville -> coordonnées (à compléter si besoin)
   const CITY_COORDS = {
     "Lyon":        [45.7640, 4.8357],
     "Paris":       [48.8566, 2.3522],
@@ -729,36 +1082,61 @@
     if (!map || !markersLayer) return;
 
     markersLayer.clearLayers();
+    propertyMarkers.clear();
     const bounds = [];
 
     properties.forEach(p => {
-      const city = (p.city || '').trim();
-      if (!city || !CITY_COORDS[city]) return;
+      let lat = p.lat;
+      let lng = p.lng;
 
-      const [lat, lng] = CITY_COORDS[city];
+      if (lat == null || lng == null) {
+        const city = (p.city || '').trim();
+        if (!city || !CITY_COORDS[city]) return;
+        [lat, lng] = CITY_COORDS[city];
+      }
+
       const marker = L.marker([lat, lng]);
-
       const popupHtml = `
         <strong>${escHtml(p.title)}</strong><br/>
-        ${escHtml(p.address || city)}<br/>
+        ${escHtml(p.address || p.city || '')}<br/>
         ${fmt(p.price)}
       `;
-
       marker.bindPopup(popupHtml);
       marker.addTo(markersLayer);
+      propertyMarkers.set(p.id, marker);
       bounds.push([lat, lng]);
     });
 
     if (bounds.length) {
-      map.fitBounds(bounds, { padding: [30, 30] });
+      map.fitBounds(bounds, { padding: [26, 26] });
     }
   }
 
-  /* ── FETCH PROPERTIES ───────────────────── */
+  function focusOnProperty(p) {
+    if (!map) return;
+    let marker = propertyMarkers.get(p.id);
+    let lat = p.lat;
+    let lng = p.lng;
+
+    if (!marker) {
+      const city = (p.city || '').trim();
+      if (!city || !CITY_COORDS[city]) return;
+      [lat, lng] = CITY_COORDS[city];
+      marker = L.marker([lat, lng]).addTo(markersLayer);
+      propertyMarkers.set(p.id, marker);
+    }
+
+    const target = marker.getLatLng();
+    map.setView(target, 13, { animate: true });
+    marker.openPopup();
+  }
+
+  /* ── FETCH & RENDER PROPERTIES ──────────────── */
   async function fetchProperties() {
     try {
       const res = await fetch(`${API_BASE}/properties/`);
       const data = await res.json();
+      currentProperties = data;
       renderProperties(data);
       updateHeroKPIs(data);
     } catch (e) {
@@ -767,44 +1145,102 @@
   }
 
   function renderProperties(data) {
-    const tbody = document.getElementById('properties-tbody');
-    document.getElementById('header-count').textContent = `${data.length} bien${data.length !== 1 ? 's' : ''}`;
+    const container = document.getElementById('properties-container');
+    const countLabel = document.getElementById('properties-count-label');
+    const headerCount = document.getElementById('header-count');
+
+    const countText = `${data.length} bien${data.length !== 1 ? 's' : ''}`;
+    countLabel.textContent = countText;
+    headerCount.textContent = countText;
 
     if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">🏠</div><p>Aucun bien enregistré — ajoutez le premier ci-contre.</p></div></td></tr>`;
+      container.innerHTML = `
+        <div class="properties-empty">
+          Aucun bien enregistré pour le moment. Ajoutez un premier bien à gauche pour constituer votre portefeuille.
+        </div>
+      `;
       updateMapMarkers([]);
       return;
     }
 
-    tbody.innerHTML = data.map(p => `
-      <tr>
-        <td class="td-id">${p.id}</td>
-        <td>
-          <div class="prop-main">
-            <img class="prop-thumb" src="${escHtml(p.image_url || '')}" onerror="this.style.visibility='hidden';" alt="">
-            <div class="prop-text">
-              <span class="prop-title">${escHtml(p.title)}</span>
-              <span class="prop-address">${escHtml(p.address || '')}</span>
-            </div>
-          </div>
-        </td>
-        <td>${escHtml(p.city)}</td>
-        <td class="td-price">${fmt(p.price)}</td>
-        <td>${statusBadge(p.status)}</td>
-      </tr>
-    `).join('');
+    const cardsHtml = `
+      <div class="properties-grid">
+        ${data.map(p => renderPropertyCard(p)).join('')}
+      </div>
+    `;
 
+    container.innerHTML = cardsHtml;
     updateMapMarkers(data);
   }
 
-  function updateHeroKPIs(data) {
-    document.getElementById('kpi-total').textContent = data.length;
-    if (data.length) {
-      const avg = data.reduce((s, p) => s + p.price, 0) / data.length;
-      document.getElementById('kpi-avg').textContent = fmtCompact(Math.round(avg)) + '€';
-      const villes = new Set(data.map(p => p.city)).size;
-      document.getElementById('kpi-villes').textContent = villes;
+  function renderPropertyCard(p) {
+    const status = p.status || 'a_vendre';
+    let statusLabel = 'À vendre';
+    let statusClass = '';
+    let cardStatusClass = '';
+
+    if (status === 'vendu') {
+      statusLabel = 'Vendu';
+      statusClass = 'status-vendu';
+      cardStatusClass = 'card-sold';
+    } else if (status === 'a_louer') {
+      statusLabel = 'À louer';
+    } else if (status === 'loue') {
+      statusLabel = 'Loué';
+      statusClass = 'status-loue';
+      cardStatusClass = 'card-rented';
     }
+
+    const imageUrl = p.image_url || 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg';
+
+    const parts = [];
+    if (p.surface) parts.push(`${p.surface} m²`);
+    if (p.bedrooms) parts.push(`${p.bedrooms} ch.`);
+    if (p.bathrooms) parts.push(`${p.bathrooms} sdb`);
+
+    const typeStr = p.type ? p.type.charAt(0).toUpperCase() + p.type.slice(1) : '';
+
+    return `
+      <article class="property-card ${cardStatusClass}" onclick="openDetail(${p.id})">
+        <div class="property-image-wrap">
+          <img class="property-image" src="${escHtml(imageUrl)}" alt="" onerror="this.style.display='none';">
+          <div class="property-pill">
+            <span class="property-pill-dot"></span>
+            Ref. ${p.id}
+          </div>
+        </div>
+        <div class="property-body">
+          <div class="property-main">
+            <div class="property-title">${escHtml(p.title)}</div>
+            <div class="property-address">${escHtml(p.address || '')}</div>
+            <div class="property-city-type">
+              ${escHtml(p.city || '')}${typeStr ? ' • ' + escHtml(typeStr) : ''}
+            </div>
+            <div class="property-meta">
+              ${parts.length ? escHtml(parts.join(' • ')) : ''}
+            </div>
+          </div>
+          <div>
+            <div class="property-price">${fmt(p.price)}</div>
+            <div class="property-status-pill ${statusClass}">${statusLabel}</div>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function updateHeroKPIs(data) {
+    document.getElementById('kpi-total').textContent = data.length || '—';
+    if (!data.length) {
+      document.getElementById('kpi-avg').textContent = '—';
+      document.getElementById('kpi-villes').textContent = '—';
+      return;
+    }
+
+    const avg = data.reduce((s, p) => s + p.price, 0) / data.length;
+    document.getElementById('kpi-avg').textContent = fmtCompact(Math.round(avg)) + '€';
+    const villes = new Set(data.map(p => p.city)).size;
+    document.getElementById('kpi-villes').textContent = villes;
   }
 
   /* ── FETCH STATS ────────────────────────── */
@@ -812,53 +1248,38 @@
     try {
       const res = await fetch(`${API_BASE}/stats/`);
       const data = await res.json();
-      renderStats(data);
+      // Utilisable plus tard pour d'autres blocs
     } catch (e) {
       console.error(e);
     }
   }
 
-  function renderStats(data) {
-    const strip = document.getElementById('stats-strip');
-    const entries = [
-      {
-        label: 'Biens total',
-        value: data.total_properties ?? '—',
-        cls: 'blue'
-      },
-      {
-        label: 'Biens vendus',
-        value: data.sold_properties ?? '—',
-        cls: 'green'
-      },
-      {
-        label: 'Transactions / CA',
-        value: (data.total_transactions ?? 0) + ' / ' + (data.total_revenue ?? 0),
-        cls: 'red'
-      }
-    ];
-
-    strip.innerHTML = entries.map(e => `
-      <div class="stat-card ${e.cls}">
-        <div class="stat-label">${e.label}</div>
-        <div class="stat-value">${e.value}</div>
-      </div>
-    `).join('');
-  }
-
   /* ── SUBMIT ─────────────────────────────── */
   async function handleSubmit() {
-    const title    = document.getElementById('title').value.trim();
-    const city     = document.getElementById('city').value.trim();
-    const price    = parseFloat(document.getElementById('price').value);
-    const address  = document.getElementById('address').value.trim() || null;
-    const imageUrl = document.getElementById('image_url').value.trim() || null;
-    const status   = document.getElementById('status').value;
+    const title       = document.getElementById('title').value.trim();
+    const city        = document.getElementById('city').value.trim();
+    const price       = parseFloat(document.getElementById('price').value);
+    const address     = document.getElementById('address').value.trim() || null;
+    const surfaceVal  = document.getElementById('surface').value;
+    const bedroomsVal = document.getElementById('bedrooms').value;
+    const bathroomsVal= document.getElementById('bathrooms').value;
+    const type        = document.getElementById('type').value || null;
+    const status      = document.getElementById('status').value;
+    const imageUrl    = document.getElementById('image_url').value.trim() || null;
+    const latVal      = document.getElementById('lat').value;
+    const lngVal      = document.getElementById('lng').value;
+    const description = document.getElementById('description').value.trim() || null;
 
     if (!title || !city || isNaN(price)) {
-      showToast('⚠️ Veuillez remplir au minimum titre, ville et prix');
+      showToast('Veuillez renseigner au minimum le titre, la ville et le prix.');
       return;
     }
+
+    const surface   = surfaceVal ? parseFloat(surfaceVal) : null;
+    const bedrooms  = bedroomsVal ? parseInt(bedroomsVal, 10) : null;
+    const bathrooms = bathroomsVal ? parseInt(bathroomsVal, 10) : null;
+    const lat       = latVal ? parseFloat(latVal) : null;
+    const lng       = lngVal ? parseFloat(lngVal) : null;
 
     const btn = document.getElementById('submit-btn');
     btn.textContent = 'Ajout en cours…';
@@ -868,32 +1289,131 @@
       const res = await fetch(`${API_BASE}/properties/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
-        body: JSON.stringify({ title, city, price, status, image_url: imageUrl, address })
+        body: JSON.stringify({
+          title,
+          city,
+          price,
+          status,
+          image_url: imageUrl,
+          address,
+          surface,
+          bedrooms,
+          bathrooms,
+          type,
+          description,
+          lat,
+          lng
+        })
       });
 
       if (!res.ok) throw new Error();
 
-      document.getElementById('title').value     = '';
-      document.getElementById('city').value      = '';
-      document.getElementById('price').value     = '';
-      document.getElementById('address').value   = '';
-      document.getElementById('image_url').value = '';
-      document.getElementById('status').value    = 'a_vendre';
+      document.getElementById('title').value       = '';
+      document.getElementById('city').value        = '';
+      document.getElementById('price').value       = '';
+      document.getElementById('address').value     = '';
+      document.getElementById('surface').value     = '';
+      document.getElementById('bedrooms').value    = '';
+      document.getElementById('bathrooms').value   = '';
+      document.getElementById('type').value        = '';
+      document.getElementById('status').value      = 'a_vendre';
+      document.getElementById('image_url').value   = '';
+      document.getElementById('lat').value         = '';
+      document.getElementById('lng').value         = '';
+      document.getElementById('description').value = '';
 
-      showToast('✓ Bien ajouté avec succès');
+      showToast('Bien ajouté au portefeuille.');
       fetchProperties();
       fetchStats();
     } catch {
-      showToast('✗ Erreur lors de l\'ajout');
+      showToast('Erreur lors de l’ajout du bien.');
     } finally {
-      btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Ajouter le bien`;
+      btn.textContent = 'Ajouter le bien au portefeuille';
       btn.disabled = false;
     }
   }
 
-  /* ── SECURITY ───────────────────────────── */
-  function escHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  /* ── MODAL DETAIL ───────────────────────── */
+  function openDetail(id) {
+    const p = currentProperties.find(x => x.id === id);
+    if (!p) return;
+
+    const backdrop = document.getElementById('detail-backdrop');
+    backdrop.classList.add('show');
+
+    const img = document.getElementById('detail-image');
+    img.src = p.image_url || 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg';
+
+    document.getElementById('detail-title').textContent = p.title || '';
+    const addr = [p.address, p.city].filter(Boolean).join(' • ');
+    document.getElementById('detail-address').textContent = addr || '';
+
+    document.getElementById('detail-price').textContent = fmt(p.price);
+
+    const desc = p.description || "Aucune description détaillée n'a encore été renseignée pour ce bien.";
+    document.getElementById('detail-description').textContent = desc;
+
+    const metas = [];
+    if (p.type) metas.push(capitalize(p.type));
+    if (p.surface) metas.push(`${p.surface} m²`);
+    if (p.bedrooms) metas.push(`${p.bedrooms} chambre${p.bedrooms > 1 ? 's' : ''}`);
+    if (p.bathrooms) metas.push(`${p.bathrooms} salle${p.bathrooms > 1 ? 's' : ''} d’eau`);
+    document.getElementById('detail-metas').innerHTML = metas.map(m => `<span class="meta-pill">${escHtml(m)}</span>`).join('');
+
+    const availContainer = document.getElementById('detail-availability');
+    const status = p.status || 'a_vendre';
+    let availHtml = '';
+    if (status === 'a_vendre' || status === 'a_louer') {
+      const label = status === 'a_vendre' ? 'Disponible à la vente' : 'Disponible à la location';
+      availHtml = `
+        <div class="availability-badge avail-ok">
+          <span class="availability-dot"></span>
+          ${label}
+        </div>
+        <div class="modal-status-text">
+          Ce bien peut être proposé à de nouveaux clients. Mettez à jour le statut lorsqu’une transaction est signée.
+        </div>
+      `;
+    } else {
+      const label = status === 'vendu' ? 'Déjà vendu' : 'Déjà loué';
+      availHtml = `
+        <div class="availability-badge avail-no">
+          <span class="availability-dot"></span>
+          ${label}
+        </div>
+        <div class="modal-status-text">
+          Ce bien n’est plus disponible. Il reste visible pour historique et analyse du portefeuille.
+        </div>
+      `;
+    }
+    availContainer.innerHTML = availHtml;
+
+    const locText = document.getElementById('detail-location-text');
+    if (p.lat != null && p.lng != null) {
+      locText.textContent = "Localisation précise disponible. La carte est centrée sur ce bien.";
+    } else if (p.city) {
+      locText.textContent = "Localisation centrée sur la ville du bien.";
+    } else {
+      locText.textContent = "Aucune information de localisation n’est renseignée.";
+    }
+
+    focusOnProperty(p);
+  }
+
+  function closeDetail() {
+    const backdrop = document.getElementById('detail-backdrop');
+    backdrop.classList.remove('show');
+  }
+
+  function backdropClick(e) {
+    if (e.target.id === 'detail-backdrop') {
+      closeDetail();
+    }
+  }
+
+  function capitalize(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   /* ── INIT ───────────────────────────────── */

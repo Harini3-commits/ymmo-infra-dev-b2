@@ -8,9 +8,22 @@ class PropertyBase(BaseModel):
     title: str
     city: str
     price: float
+
     status: Optional[str] = "a_vendre"
+
     image_url: Optional[str] = None
-    address: Optional[str] = None   # nouvelle info d'adresse
+    address: Optional[str] = None
+
+    # Détails
+    surface: Optional[float] = None
+    bedrooms: Optional[int] = None
+    bathrooms: Optional[int] = None
+    type: Optional[str] = None
+    description: Optional[str] = None
+
+    # Coordonnées
+    lat: Optional[float] = None
+    lng: Optional[float] = None
 
 
 class PropertyCreate(PropertyBase):

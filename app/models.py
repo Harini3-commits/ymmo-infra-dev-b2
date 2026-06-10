@@ -7,12 +7,31 @@ class Property(Base):
     __tablename__ = "properties"
 
     id = Column(Integer, primary_key=True, index=True)
+
+    # Infos principales
     title = Column(String, index=True)
     city = Column(String, index=True)
+    address = Column(String, nullable=True)
+
     price = Column(Float)
-    status = Column(String, default="a_vendre")  # a_vendre / vendu / a_louer / loue
-    image_url = Column(String, nullable=True)    # URL d'image du bien
-    address = Column(String, nullable=True)      # nouvelle colonne : adresse complète
+
+    # Statut : a_vendre / vendu / a_louer / loue
+    status = Column(String, default="a_vendre")
+
+    # Visuel
+    image_url = Column(String, nullable=True)
+
+    # Détails immobiliers
+    surface = Column(Float, nullable=True)      # m²
+    bedrooms = Column(Integer, nullable=True)   # nombre de chambres
+    bathrooms = Column(Integer, nullable=True)  # nombre de salles de bain
+    type = Column(String, nullable=True)        # appartement / maison / studio / ...
+
+    description = Column(String, nullable=True) # description texte
+
+    # Coordonnées précises (optionnelles)
+    lat = Column(Float, nullable=True)
+    lng = Column(Float, nullable=True)
 
     # Relation avec Transaction (un bien peut avoir plusieurs transactions)
     transactions = relationship("Transaction", back_populates="property")

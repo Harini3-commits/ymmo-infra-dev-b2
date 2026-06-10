@@ -21,6 +21,13 @@ def create_property(property_in: schemas.PropertyCreate, db: Session = Depends(g
         status=property_in.status,
         image_url=property_in.image_url,
         address=property_in.address,
+        surface=property_in.surface,
+        bedrooms=property_in.bedrooms,
+        bathrooms=property_in.bathrooms,
+        type=property_in.type,
+        description=property_in.description,
+        lat=property_in.lat,
+        lng=property_in.lng,
     )
     db.add(db_property)
     db.commit()
@@ -57,6 +64,13 @@ def update_property(property_id: int, property_in: schemas.PropertyCreate, db: S
     prop.status = property_in.status
     prop.image_url = property_in.image_url
     prop.address = property_in.address
+    prop.surface = property_in.surface
+    prop.bedrooms = property_in.bedrooms
+    prop.bathrooms = property_in.bathrooms
+    prop.type = property_in.type
+    prop.description = property_in.description
+    prop.lat = property_in.lat
+    prop.lng = property_in.lng
 
     db.add(prop)
     db.commit()
