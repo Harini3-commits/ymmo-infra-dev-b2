@@ -12,7 +12,6 @@
     crossorigin=""
   />
 
-
   <style>
     :root {
       --bg-body:      #F5F2EC;
@@ -20,32 +19,25 @@
       --bg-card:      #FFFFFF;
       --bg-chip:      #F7F1E6;
 
-
       --text-main:    #1F2933;
       --text-muted:   #7C828F;
       --text-soft:    #A3A7B4;
-
 
       --accent:       #C8A66A;
       --accent-soft:  #E3D2A4;
       --accent-dark:  #8C6E3A;
 
-
       --border-soft:  #E4DFD5;
       --shadow-soft:  0 18px 45px rgba(31, 41, 51, 0.08);
-
 
       --radius-lg:    18px;
       --radius-md:    14px;
       --radius-sm:    999px;
 
-
       --trans:        .22s ease;
     }
 
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 
     body {
       font-family: 'Inter', sans-serif;
@@ -53,7 +45,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-
 
     header {
       max-width: 1180px;
@@ -64,13 +55,11 @@
       justify-content: space-between;
     }
 
-
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
 
     .logo-mark {
       width: 34px;
@@ -86,7 +75,6 @@
       font-size: 1.35rem;
     }
 
-
     .logo-text-main {
       font-family: 'DM Serif Display', serif;
       letter-spacing: .12em;
@@ -94,13 +82,11 @@
       text-transform: uppercase;
     }
 
-
     .logo-text-sub {
       font-size: .78rem;
       color: var(--text-soft);
       margin-top: 2px;
     }
-
 
     .header-right {
       display: flex;
@@ -111,12 +97,10 @@
       color: var(--text-soft);
     }
 
-
     .header-agent {
       font-weight: 500;
       color: var(--text-main);
     }
-
 
     .header-pill {
       background: rgba(255,255,255,0.8);
@@ -129,7 +113,6 @@
       align-items: center;
     }
 
-
     .header-pill-dot {
       width: 7px;
       height: 7px;
@@ -137,13 +120,11 @@
       background: var(--accent);
     }
 
-
     main {
       max-width: 1180px;
       margin: 16px auto 40px;
       padding: 0 20px;
     }
-
 
     .hero {
       background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(244,236,225,0.9));
@@ -158,7 +139,6 @@
       overflow: hidden;
     }
 
-
     .hero::after {
       content: '';
       position: absolute;
@@ -171,12 +151,10 @@
       opacity: .9;
     }
 
-
     .hero-left {
       position: relative;
       z-index: 1;
     }
-
 
     .eyebrow {
       font-size: .75rem;
@@ -186,7 +164,6 @@
       margin-bottom: 6px;
     }
 
-
     .hero-title {
       font-family: 'DM Serif Display', serif;
       font-size: 2rem;
@@ -195,17 +172,14 @@
       color: var(--text-main);
     }
 
-
     .hero-title span {
       color: var(--accent-dark);
     }
-
 
     .hero-sub {
       font-size: .9rem;
       color: var(--text-muted);
     }
-
 
     .hero-badges {
       margin-top: 14px;
@@ -213,7 +187,6 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-
 
     .chip {
       background: rgba(255,255,255,0.9);
@@ -227,14 +200,12 @@
       align-items: center;
     }
 
-
     .chip-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: var(--accent);
     }
-
 
     .hero-right {
       position: relative;
@@ -246,12 +217,10 @@
       justify-content: space-between;
     }
 
-
     .kpis {
       display: flex;
       gap: 14px;
     }
-
 
     .kpi {
       background: rgba(255,255,255,0.9);
@@ -261,7 +230,6 @@
       border: 1px solid rgba(228,223,213,0.9);
     }
 
-
     .kpi-label {
       font-size: .7rem;
       text-transform: uppercase;
@@ -270,13 +238,11 @@
       margin-bottom: 3px;
     }
 
-
     .kpi-value {
       font-family: 'DM Serif Display', serif;
       font-size: 1.4rem;
       color: var(--text-main);
     }
-
 
     .hero-note {
       font-size: .78rem;
@@ -284,7 +250,6 @@
       max-width: 230px;
       text-align: right;
     }
-
 
     .section-row {
       display: grid;
@@ -294,7 +259,6 @@
       align-items: flex-start;
     }
 
-
     .card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
@@ -303,7 +267,6 @@
       padding: 16px 18px 18px;
     }
 
-
     .card-header {
       display: flex;
       align-items: baseline;
@@ -311,19 +274,16 @@
       margin-bottom: 10px;
     }
 
-
     .card-title {
       font-family: 'DM Serif Display', serif;
       font-size: 1.1rem;
       color: var(--text-main);
     }
 
-
     .card-subtitle {
       font-size: .8rem;
       color: var(--text-soft);
     }
-
 
     #map {
       width: 100%;
@@ -334,20 +294,17 @@
       border: 1px solid rgba(228,223,213,0.9);
     }
 
-
     .form {
       margin-top: 10px;
       display: grid;
       gap: 10px;
     }
 
-
     .field {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-
 
     .field-label {
       font-size: .75rem;
@@ -356,20 +313,17 @@
       color: var(--text-soft);
     }
 
-
     .field-row {
       display: grid;
       gap: 10px;
       grid-template-columns: 1.1fr 1fr;
     }
 
-
     .field-row-three {
       display: grid;
       gap: 10px;
       grid-template-columns: 1fr 1fr 1fr;
     }
-
 
     .input,
     .select,
@@ -385,12 +339,10 @@
       transition: border-color var(--trans), box-shadow var(--trans), background var(--trans);
     }
 
-
     .textarea {
       min-height: 72px;
       resize: vertical;
     }
-
 
     .input:focus,
     .select:focus,
@@ -399,7 +351,6 @@
       background: #FFFDF7;
       box-shadow: 0 0 0 2px rgba(200,166,106,0.25);
     }
-
 
     .btn-primary {
       margin-top: 4px;
@@ -421,19 +372,16 @@
       width: fit-content;
     }
 
-
     .btn-primary:hover {
       transform: translateY(-1px);
       filter: brightness(1.02);
       box-shadow: 0 18px 40px rgba(152,119,63,0.45);
     }
 
-
     .btn-primary:active {
       transform: translateY(0);
       box-shadow: 0 10px 20px rgba(152,119,63,0.3);
     }
-
 
     .properties-header {
       display: flex;
@@ -442,12 +390,10 @@
       margin-bottom: 10px;
     }
 
-
     .properties-count {
       font-size: .8rem;
       color: var(--text-soft);
     }
-
 
     .properties-grid {
       display: grid;
@@ -455,7 +401,6 @@
       gap: 14px;
       margin-top: 6px;
     }
-
 
     .property-card {
       background: linear-gradient(145deg, #FFFFFF, #F8F3EA);
@@ -468,20 +413,17 @@
       cursor: pointer;
     }
 
-
     .property-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 20px 35px rgba(31,41,51,0.12);
       border-color: rgba(200,166,106,0.7);
     }
 
-
     .property-image-wrap {
       position: relative;
       height: 150px;
       overflow: hidden;
     }
-
 
     .property-image {
       width: 100%;
@@ -492,11 +434,9 @@
       transition: transform .35s ease;
     }
 
-
     .property-card:hover .property-image {
       transform: scale(1.06);
     }
-
 
     .property-pill {
       position: absolute;
@@ -512,14 +452,12 @@
       gap: 6px;
     }
 
-
     .property-pill-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: #4ADE80;
     }
-
 
     .property-body {
       padding: 10px 12px 12px;
@@ -529,13 +467,11 @@
       align-items: flex-end;
     }
 
-
     .property-main {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
-
 
     .property-title {
       font-weight: 600;
@@ -543,12 +479,10 @@
       color: var(--text-main);
     }
 
-
     .property-address {
       font-size: .78rem;
       color: var(--text-soft);
     }
-
 
     .property-city-type {
       font-size: .78rem;
@@ -556,13 +490,11 @@
       margin-top: 2px;
     }
 
-
     .property-meta {
       font-size: .76rem;
       color: var(--text-soft);
       margin-top: 2px;
     }
-
 
     .property-price {
       font-family: 'DM Serif Display', serif;
@@ -571,7 +503,6 @@
       text-align: right;
       white-space: nowrap;
     }
-
 
     .property-status-pill {
       margin-top: 2px;
@@ -584,14 +515,12 @@
       text-align: right;
     }
 
-
     .status-vendu {
       border-color: rgba(46,204,113,0.5);
       color: #1E824C;
       background: rgba(236,253,245,0.95);
       filter: grayscale(0.15);
     }
-
 
     .status-loue {
       border-color: rgba(91,107,192,0.5);
@@ -600,12 +529,10 @@
       filter: grayscale(0.15);
     }
 
-
     .card-sold,
     .card-rented {
       filter: grayscale(0.12);
     }
-
 
     .properties-empty {
       padding: 40px 12px;
@@ -613,7 +540,6 @@
       color: var(--text-soft);
       font-size: .86rem;
     }
-
 
     /* actions sous chaque carte */
     .property-actions {
@@ -623,7 +549,6 @@
       border-top: 1px solid rgba(228,223,213,0.8);
       background: rgba(255,255,255,0.9);
     }
-
 
     .btn-small {
       border-radius: 999px;
@@ -638,13 +563,11 @@
       gap: 4px;
     }
 
-
     .btn-small-primary {
       background: linear-gradient(135deg, #D3B57A, #C49859);
       color: #2B2215;
       border-color: rgba(200,166,106,0.8);
     }
-
 
     .filters {
       display: flex;
@@ -655,7 +578,6 @@
       color: var(--text-soft);
     }
 
-
     .filters select {
       border-radius: 999px;
       border: 1px solid rgba(228,223,213,0.9);
@@ -663,7 +585,6 @@
       padding: 4px 8px;
       font-size: .8rem;
     }
-
 
     .filters button {
       border-radius: 999px;
@@ -675,7 +596,6 @@
       color: var(--text-soft);
     }
 
-
     .insights {
       margin-top: 10px;
       font-size: .8rem;
@@ -683,7 +603,6 @@
       display: grid;
       gap: 2px;
     }
-
 
     .modal-backdrop {
       position: fixed;
@@ -695,11 +614,9 @@
       z-index: 900;
     }
 
-
     .modal-backdrop.show {
       display: flex;
     }
-
 
     .modal {
       background: #FFFFFF;
@@ -713,13 +630,11 @@
       flex-direction: column;
     }
 
-
     .modal-image-wrap {
       position: relative;
       height: 260px;
       overflow: hidden;
     }
-
 
     .modal-image {
       width: 100%;
@@ -728,13 +643,11 @@
       display: block;
     }
 
-
     .modal-image-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.55), transparent 55%);
     }
-
 
     .modal-top-info {
       position: absolute;
@@ -743,19 +656,16 @@
       color: #FFF;
     }
 
-
     .modal-top-title {
       font-family: 'DM Serif Display', serif;
       font-size: 1.5rem;
     }
-
 
     .modal-top-address {
       font-size: .85rem;
       opacity: .9;
       margin-top: 2px;
     }
-
 
     .modal-top-price {
       position: absolute;
@@ -768,14 +678,12 @@
       border-radius: 999px;
     }
 
-
     .modal-body {
       padding: 16px 18px 18px;
       display: grid;
       grid-template-columns: 1.9fr 1.4fr;
       gap: 18px;
     }
-
 
     .modal-section-title {
       font-size: .78rem;
@@ -785,14 +693,12 @@
       margin-bottom: 6px;
     }
 
-
     .modal-description {
       font-size: .9rem;
       color: var(--text-main);
       line-height: 1.5;
       white-space: pre-wrap;
     }
-
 
     .modal-metas {
       display: flex;
@@ -801,7 +707,6 @@
       margin-top: 8px;
     }
 
-
     .meta-pill {
       border-radius: 999px;
       padding: 4px 10px;
@@ -809,7 +714,6 @@
       font-size: .78rem;
       color: var(--text-muted);
     }
-
 
     .modal-right-block {
       background: #F8F4EE;
@@ -821,7 +725,6 @@
       gap: 10px;
     }
 
-
     .availability-badge {
       display: inline-flex;
       align-items: center;
@@ -832,41 +735,34 @@
       font-weight: 500;
     }
 
-
     .availability-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
     }
 
-
     .avail-ok {
       background: #E7F8EC;
       color: #166534;
     }
 
-
     .avail-ok .availability-dot {
       background: #16A34A;
     }
-
 
     .avail-no {
       background: #FEE2E2;
       color: #B91C1C;
     }
 
-
     .avail-no .availability-dot {
       background: #DC2626;
     }
-
 
     .modal-status-text {
       font-size: .82rem;
       color: var(--text-muted);
     }
-
 
     .modal-close-btn {
       position: absolute;
@@ -884,7 +780,6 @@
       cursor: pointer;
       font-size: 16px;
     }
-
 
     #toast {
       position: fixed;
@@ -904,12 +799,15 @@
       z-index: 999;
     }
 
-
     #toast.show {
       transform: translateY(0);
       opacity: 1;
     }
 
+    /* Formulaire caché au départ */
+    #add-property-card {
+      display: none;
+    }
 
     @media (max-width: 980px) {
       .hero {
@@ -929,7 +827,6 @@
       }
     }
 
-
     @media (max-width: 720px) {
       main { padding: 0 14px; }
       header { padding: 0 14px; }
@@ -947,14 +844,12 @@
       }
     }
 
-
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 <body>
-
 
 <header>
   <div class="logo">
@@ -972,7 +867,6 @@
     </div>
   </div>
 </header>
-
 
 <main>
   <!-- HERO -->
@@ -999,7 +893,7 @@
         </div>
       </div>
 
-      <!-- Sous-titre ajouté + bloc insights existant -->
+      <!-- Sous-titre + insights -->
       <div class="modal-section-title" style="margin-top: 10px; letter-spacing: .14em;">
         Vue synthétique du portefeuille
       </div>
@@ -1009,6 +903,11 @@
         <div>Vendus : <span id="ins-vendus">0</span> • Loués : <span id="ins-loues">0</span></div>
         <div>Prix moyen du portefeuille : <span id="ins-avgprice">0</span> €</div>
       </div>
+
+      <!-- Bouton pour afficher / cacher le formulaire -->
+      <button class="btn-primary" id="toggle-add-form" style="margin-top:12px;">
+        + Ajouter un bien au portefeuille
+      </button>
     </div>
     <div class="hero-right">
       <div class="kpis">
@@ -1031,10 +930,9 @@
     </div>
   </section>
 
-
-  <!-- SECTIONS : MAP + FORM / PROPERTIES -->
-  <section class="section-row">
-    <!-- GAUCHE : CARTE + FORM -->
+  <!-- Carte + filtrage + biens sur une seule rangée -->
+  <section class="section-row" style="margin-top: 24px;">
+    <!-- GAUCHE : CARTE -->
     <div>
       <div class="card">
         <div class="card-header">
@@ -1045,96 +943,7 @@
         </div>
         <div id="map"></div>
       </div>
-
-
-      <div class="card" style="margin-top: 16px;">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Ajouter un bien</div>
-            <div class="card-subtitle">Renseignez les informations clés du bien</div>
-          </div>
-        </div>
-        <div class="form">
-          <div class="field">
-            <label class="field-label">Titre du bien</label>
-            <input class="input" type="text" id="title" placeholder="Appartement haussmannien, 6e — Vue Tour Eiffel">
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label class="field-label">Ville</label>
-              <input class="input" type="text" id="city" placeholder="Paris">
-            </div>
-            <div class="field">
-              <label class="field-label">Prix (€)</label>
-              <input class="input" type="number" id="price" placeholder="1450000">
-            </div>
-          </div>
-          <div class="field">
-            <label class="field-label">Adresse complète</label>
-            <input class="input" type="text" id="address" placeholder="15 Rue de Rivoli, 75004 Paris">
-          </div>
-          <div class="field-row-three">
-            <div class="field">
-              <label class="field-label">Surface (m²)</label>
-              <input class="input" type="number" id="surface" placeholder="95">
-            </div>
-            <div class="field">
-              <label class="field-label">Chambres</label>
-              <input class="input" type="number" id="bedrooms" placeholder="3">
-            </div>
-            <div class="field">
-              <label class="field-label">Salles d’eau</label>
-              <input class="input" type="number" id="bathrooms" placeholder="2">
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label class="field-label">Type de bien</label>
-              <select class="select" id="type">
-                <option value="">—</option>
-                <option value="appartement">Appartement</option>
-                <option value="maison">Maison</option>
-                <option value="studio">Studio</option>
-                <option value="villa">Villa</option>
-                <option value="loft">Loft</option>
-              </select>
-            </div>
-            <div class="field">
-              <label class="field-label">Statut</label>
-              <select class="select" id="status">
-                <option value="a_vendre">À vendre</option>
-                <option value="vendu">Vendu</option>
-                <option value="a_louer">À louer</option>
-                <option value="loue">Loué</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label class="field-label">URL de l’image</label>
-            <input class="input" type="text" id="image_url" placeholder="https://.../photo.jpg">
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label class="field-label">Latitude (optionnel)</label>
-              <input class="input" type="number" step="0.000001" id="lat" placeholder="48.8566">
-            </div>
-            <div class="field">
-              <label class="field-label">Longitude (optionnel)</label>
-              <input class="input" type="number" step="0.000001" id="lng" placeholder="2.3522">
-            </div>
-          </div>
-          <div class="field">
-            <label class="field-label">Description</label>
-            <textarea class="textarea" id="description" placeholder="Au dernier étage d'un immeuble haussmannien, vue dégagée et lumière traversante."></textarea>
-          </div>
-          <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            Ajouter le bien au portefeuille
-          </button>
-        </div>
-      </div>
     </div>
-
 
     <!-- DROITE : PROPERTIES GRID -->
     <div class="card">
@@ -1142,7 +951,6 @@
         <div class="card-title">Portefeuille de biens</div>
         <div class="properties-count" id="properties-count-label">0 bien</div>
       </div>
-
 
       <!-- Filtres -->
       <div class="filters">
@@ -1160,7 +968,6 @@
         <button id="filter-reset">Réinitialiser</button>
       </div>
 
-
       <div id="properties-container">
         <div class="properties-empty">
           Aucun bien enregistré pour le moment. Ajoutez un premier bien à gauche pour constituer votre portefeuille.
@@ -1168,11 +975,99 @@
       </div>
     </div>
   </section>
+
+  <!-- FORMULAIRE D'AJOUT, CACHÉ PAR DÉFAUT -->
+  <section style="margin-top: 20px;">
+    <div class="card" id="add-property-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Ajouter un bien</div>
+          <div class="card-subtitle">Renseignez les informations clés du bien</div>
+        </div>
+      </div>
+      <div class="form">
+        <div class="field">
+          <label class="field-label">Titre du bien</label>
+          <input class="input" type="text" id="title" placeholder="Appartement haussmannien, 6e — Vue Tour Eiffel">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Ville</label>
+            <input class="input" type="text" id="city" placeholder="Paris">
+          </div>
+          <div class="field">
+            <label class="field-label">Prix (€)</label>
+            <input class="input" type="number" id="price" placeholder="1450000">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Adresse complète</label>
+          <input class="input" type="text" id="address" placeholder="15 Rue de Rivoli, 75004 Paris">
+        </div>
+        <div class="field-row-three">
+          <div class="field">
+            <label class="field-label">Surface (m²)</label>
+            <input class="input" type="number" id="surface" placeholder="95">
+          </div>
+          <div class="field">
+            <label class="field-label">Chambres</label>
+            <input class="input" type="number" id="bedrooms" placeholder="3">
+          </div>
+          <div class="field">
+            <label class="field-label">Salles d’eau</label>
+            <input class="input" type="number" id="bathrooms" placeholder="2">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Type de bien</label>
+            <select class="select" id="type">
+              <option value="">—</option>
+              <option value="appartement">Appartement</option>
+              <option value="maison">Maison</option>
+              <option value="studio">Studio</option>
+              <option value="villa">Villa</option>
+              <option value="loft">Loft</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Statut</label>
+            <select class="select" id="status">
+              <option value="a_vendre">À vendre</option>
+              <option value="vendu">Vendu</option>
+              <option value="a_louer">À louer</option>
+              <option value="loue">Loué</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">URL de l’image</label>
+          <input class="input" type="text" id="image_url" placeholder="https://.../photo.jpg">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Latitude (optionnel)</label>
+            <input class="input" type="number" step="0.000001" id="lat" placeholder="48.8566">
+          </div>
+          <div class="field">
+            <label class="field-label">Longitude (optionnel)</label>
+            <input class="input" type="number" step="0.000001" id="lng" placeholder="2.3522">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Description</label>
+          <textarea class="textarea" id="description" placeholder="Au dernier étage d'un immeuble haussmannien, vue dégagée et lumière traversante."></textarea>
+        </div>
+        <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter le bien au portefeuille
+        </button>
+      </div>
+    </div>
+  </section>
 </main>
 
-
 <div id="toast"></div>
-
 
 <!-- MODAL DETAIL -->
 <div class="modal-backdrop" id="detail-backdrop" onclick="backdropClick(event)">
@@ -1200,7 +1095,7 @@
         <div class="modal-section-title" style="margin-top: 8px;">Localisation</div>
         <div class="modal-status-text" id="detail-location-text"></div>
 
-        <!-- Insight prix ajouté -->
+        <!-- Insight prix -->
         <div class="modal-section-title" style="margin-top: 8px;">Insight prix</div>
         <div class="modal-status-text">
           Prix vs moyenne du portefeuille :
@@ -1211,7 +1106,6 @@
   </div>
 </div>
 
-
 <!-- Leaflet JS -->
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -1219,20 +1113,16 @@
   crossorigin=""
 ></script>
 
-
 <script>
   const API_BASE = "http://127.0.0.1:8000";
-
 
   let allProperties = [];
   let currentProperties = [];
   let portfolioAvgPrice = 0; // prix moyen du portefeuille pour l'insight
 
-
   function fmt(n) {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
   }
-
 
   function fmtCompact(n) {
     if (n >= 1e6) return (n / 1e6).toFixed(1).replace('.', ',') + 'M';
@@ -1240,14 +1130,12 @@
     return n;
   }
 
-
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2600);
   }
-
 
   function escHtml(str) {
     return String(str)
@@ -1257,11 +1145,9 @@
       .replace(/"/g,'&quot;');
   }
 
-
   let map = null;
   let markersLayer = null;
   const propertyMarkers = new Map();
-
 
   const CITY_COORDS = {
     "Lyon":        [45.7640, 4.8357],
@@ -1275,45 +1161,36 @@
     "Montpellier": [43.6108, 3.8767],
   };
 
-
   function initMap() {
     const mapDiv = document.getElementById('map');
     if (!mapDiv) return;
 
-
     map = L.map('map').setView([46.5, 2.5], 6);
-
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-
     markersLayer = L.layerGroup().addTo(map);
   }
 
-
   function updateMapMarkers(properties) {
     if (!map || !markersLayer) return;
-
 
     markersLayer.clearLayers();
     propertyMarkers.clear();
     const bounds = [];
 
-
     properties.forEach(p => {
       let lat = p.lat;
       let lng = p.lng;
-
 
       if (lat == null || lng == null) {
         const city = (p.city || '').trim();
         if (!city || !CITY_COORDS[city]) return;
         [lat, lng] = CITY_COORDS[city];
       }
-
 
       const marker = L.marker([lat, lng]);
       const popupHtml = `
@@ -1327,19 +1204,16 @@
       bounds.push([lat, lng]);
     });
 
-
     if (bounds.length) {
       map.fitBounds(bounds, { padding: [26, 26] });
     }
   }
-
 
   function focusOnProperty(p) {
     if (!map) return;
     let marker = propertyMarkers.get(p.id);
     let lat = p.lat;
     let lng = p.lng;
-
 
     if (!marker) {
       const city = (p.city || '').trim();
@@ -1349,12 +1223,10 @@
       propertyMarkers.set(p.id, marker);
     }
 
-
     const target = marker.getLatLng();
     map.setView(target, 13, { animate: true });
     marker.openPopup();
   }
-
 
   async function loadProperties() {
     try {
@@ -1370,14 +1242,11 @@
     }
   }
 
-
   function applyFiltersAndRender() {
     const status = document.getElementById("filter-status").value;
     const city = document.getElementById("filter-city").value;
 
-
     let filtered = [...allProperties];
-
 
     if (status !== "all") {
       filtered = filtered.filter(p => p.status === status);
@@ -1386,11 +1255,9 @@
       filtered = filtered.filter(p => p.city === city);
     }
 
-
     currentProperties = filtered;
     renderProperties(filtered);
   }
-
 
   function updateCityFilterOptions(properties) {
     const select = document.getElementById("filter-city");
@@ -1404,14 +1271,12 @@
     }
   }
 
-
   function updateInsights() {
     const total = allProperties.length;
     const aVendre = allProperties.filter(p => p.status === "a_vendre").length;
     const aLouer = allProperties.filter(p => p.status === "a_louer").length;
     const vendus = allProperties.filter(p => p.status === "vendu").length;
     const loues = allProperties.filter(p => p.status === "loue").length;
-
 
     let sumPrice = 0;
     let countPrice = 0;
@@ -1423,9 +1288,7 @@
     }
     const avgPrice = countPrice > 0 ? Math.round(sumPrice / countPrice) : 0;
 
-    // On garde le prix moyen global pour l'insight dans la modale
     portfolioAvgPrice = avgPrice;
-
 
     document.getElementById("ins-total").textContent = total;
     document.getElementById("ins-avendre").textContent = aVendre;
@@ -1435,17 +1298,14 @@
     document.getElementById("ins-avgprice").textContent = avgPrice.toLocaleString("fr-FR");
   }
 
-
   function renderProperties(data) {
     const container = document.getElementById('properties-container');
     const countLabel = document.getElementById('properties-count-label');
     const headerCount = document.getElementById('header-count');
 
-
     const countText = `${data.length} bien${data.length !== 1 ? 's' : ''}`;
     countLabel.textContent = countText;
     headerCount.textContent = countText;
-
 
     if (!data.length) {
       container.innerHTML = `
@@ -1457,28 +1317,23 @@
       return;
     }
 
-
     const cardsHtml = `
       <div class="properties-grid">
         ${data.map(p => renderPropertyCard(p)).join('')}
       </div>
     `;
 
-
     container.innerHTML = cardsHtml;
     updateMapMarkers(data);
 
-
-    // attacher les listeners sur les boutons d'action
+    // listeners sur les boutons d'action
     data.forEach(p => {
       const card = document.querySelector(`.property-card[data-id="${p.id}"]`);
       if (!card) return;
 
-
       const detailBtn = card.querySelector('[data-action="details"]');
       const sellBtn = card.querySelector('[data-action="sell"]');
       const rentBtn = card.querySelector('[data-action="rent"]');
-
 
       if (detailBtn) {
         detailBtn.addEventListener('click', (e) => {
@@ -1501,13 +1356,11 @@
     });
   }
 
-
   function renderPropertyCard(p) {
     const status = p.status || 'a_vendre';
     let statusLabel = 'À vendre';
     let statusClass = '';
     let cardStatusClass = '';
-
 
     if (status === 'vendu') {
       statusLabel = 'Vendu';
@@ -1521,20 +1374,15 @@
       cardStatusClass = 'card-rented';
     }
 
-
     const imageUrl = p.image_url || 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg';
-
 
     const parts = [];
     if (p.surface) parts.push(`${p.surface} m²`);
     if (p.bedrooms) parts.push(`${p.bedrooms} ch.`);
     if (p.bathrooms) parts.push(`${p.bathrooms} sdb`);
 
-
     const typeStr = p.type ? p.type.charAt(0).toUpperCase() + p.type.slice(1) : '';
 
-
-    // Actions disponibles
     let actionSell = '';
     let actionRent = '';
     if (status === 'a_vendre') {
@@ -1543,7 +1391,6 @@
     if (status === 'a_louer') {
       actionRent = '<button class="btn-small btn-small-primary" data-action="rent">Marquer comme loué</button>';
     }
-
 
     return `
       <article class="property-card ${cardStatusClass}" data-id="${p.id}">
@@ -1579,7 +1426,6 @@
     `;
   }
 
-
   async function fetchStats() {
     try {
       const res = await fetch(`${API_BASE}/stats/`);
@@ -1589,7 +1435,6 @@
       console.error(e);
     }
   }
-
 
   async function handleSubmit() {
     const title       = document.getElementById('title').value.trim();
@@ -1606,12 +1451,10 @@
     const lngVal      = document.getElementById('lng').value;
     const description = document.getElementById('description').value.trim() || null;
 
-
     if (!title || !city || isNaN(price)) {
       showToast('Veuillez renseigner au minimum le titre, la ville et le prix.');
       return;
     }
-
 
     const surface   = surfaceVal ? parseFloat(surfaceVal) : null;
     const bedrooms  = bedroomsVal ? parseInt(bedroomsVal, 10) : null;
@@ -1619,11 +1462,9 @@
     const lat       = latVal ? parseFloat(latVal) : null;
     const lng       = lngVal ? parseFloat(lngVal) : null;
 
-
     const btn = document.getElementById('submit-btn');
     btn.textContent = 'Ajout en cours…';
     btn.disabled = true;
-
 
     try {
       const res = await fetch(`${API_BASE}/properties/`, {
@@ -1646,9 +1487,7 @@
         })
       });
 
-
       if (!res.ok) throw new Error();
-
 
       document.getElementById('title').value       = '';
       document.getElementById('city').value        = '';
@@ -1664,7 +1503,6 @@
       document.getElementById('lng').value         = '';
       document.getElementById('description').value = '';
 
-
       showToast('Bien ajouté au portefeuille.');
       await loadProperties();
       fetchStats();
@@ -1676,11 +1514,9 @@
     }
   }
 
-
   async function createTransaction(property, operationType) {
     const clientId = 1; // à adapter : id d'un client générique existant
     const today = new Date().toISOString().slice(0, 10);
-
 
     const body = {
       property_id: property.id,
@@ -1691,7 +1527,6 @@
       status: "terminee"
     };
 
-
     try {
       const res = await fetch(`${API_BASE}/transactions/`, {
         method: "POST",
@@ -1699,13 +1534,11 @@
         body: JSON.stringify(body),
       });
 
-
       if (!res.ok) {
         console.error("Erreur création transaction", await res.text());
         showToast("Impossible de créer la transaction.");
         return;
       }
-
 
       await loadProperties();
       showToast(operationType === "vente" ? "Bien marqué comme vendu." : "Bien marqué comme loué.");
@@ -1715,41 +1548,32 @@
     }
   }
 
-
   function markAsSold(property) {
     createTransaction(property, "vente");
   }
-
 
   function markAsRented(property) {
     createTransaction(property, "location");
   }
 
-
   function openDetail(id) {
     const p = currentProperties.find(x => x.id === id);
     if (!p) return;
 
-
     const backdrop = document.getElementById('detail-backdrop');
     backdrop.classList.add('show');
 
-
     const img = document.getElementById('detail-image');
     img.src = p.image_url || 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg';
-
 
     document.getElementById('detail-title').textContent = p.title || '';
     const addr = [p.address, p.city].filter(Boolean).join(' • ');
     document.getElementById('detail-address').textContent = addr || '';
 
-
     document.getElementById('detail-price').textContent = fmt(p.price);
-
 
     const desc = p.description || "Aucune description détaillée n'a encore été renseignée pour ce bien.";
     document.getElementById('detail-description').textContent = desc;
-
 
     const metas = [];
     if (p.type) metas.push(capitalize(p.type));
@@ -1757,7 +1581,6 @@
     if (p.bedrooms) metas.push(`${p.bedrooms} chambre${p.bedrooms > 1 ? 's' : ''}`);
     if (p.bathrooms) metas.push(`${p.bathrooms} salle${p.bathrooms > 1 ? 's' : ''} d’eau`);
     document.getElementById('detail-metas').innerHTML = metas.map(m => `<span class="meta-pill">${escHtml(m)}</span>`).join('');
-
 
     const availContainer = document.getElementById('detail-availability');
     const status = p.status || 'a_vendre';
@@ -1787,7 +1610,6 @@
     }
     availContainer.innerHTML = availHtml;
 
-
     const locText = document.getElementById('detail-location-text');
     if (p.lat != null && p.lng != null) {
       locText.textContent = "Localisation précise disponible. La carte est centrée sur ce bien.";
@@ -1810,16 +1632,13 @@
       }
     }
 
-
     focusOnProperty(p);
   }
-
 
   function closeDetail() {
     const backdrop = document.getElementById('detail-backdrop');
     backdrop.classList.remove('show');
   }
-
 
   function backdropClick(e) {
     if (e.target.id === 'detail-backdrop') {
@@ -1827,13 +1646,12 @@
     }
   }
 
-
   function capitalize(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-
+  // Filtres
   document.getElementById("filter-status").addEventListener("change", applyFiltersAndRender);
   document.getElementById("filter-city").addEventListener("change", applyFiltersAndRender);
   document.getElementById("filter-reset").addEventListener("click", () => {
@@ -1842,6 +1660,16 @@
     applyFiltersAndRender();
   });
 
+  // Toggle formulaire
+  const toggleBtn = document.getElementById("toggle-add-form");
+  const addCard = document.getElementById("add-property-card");
+  if (toggleBtn && addCard) {
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = addCard.style.display === "none" || addCard.style.display === "";
+      addCard.style.display = isHidden ? "block" : "none";
+      toggleBtn.textContent = isHidden ? "Fermer le formulaire d’ajout" : "+ Ajouter un bien au portefeuille";
+    });
+  }
 
   initMap();
   loadProperties();
