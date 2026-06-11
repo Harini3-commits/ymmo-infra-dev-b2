@@ -2,7 +2,6 @@ import sqlite3
 from contextlib import closing
 from pathlib import Path
 
-
 DB_PATH = Path(__file__).parent / "ymmo.db"
 
 
@@ -52,7 +51,9 @@ def analyze_properties(conn: sqlite3.Connection):
             print("-" * 45)
             for r in rows:
                 statut = r["status"] or "inconnu"
-                print(f"{statut:12} | {r['n']:8} | {int(r['avg_price']) if r['avg_price'] is not None else '-':14}")
+                avg_price = r["avg_price"]
+                avg_str = int(avg_price) if avg_price is not None else "-"
+                print(f"{statut:12} | {r['n']:8} | {avg_str:14}")
 
         # Prix min / max / moyen global
         print_subtitle("Prix global")
@@ -71,7 +72,7 @@ def analyze_properties(conn: sqlite3.Connection):
         else:
             print("Pas assez de données pour calculer les prix.")
 
-        # Prix moyen par ville
+        # Prix moyen par ville (top 10)
         print_subtitle("Prix moyen par ville (top 10)")
         cur.execute("""
             SELECT city,
@@ -90,7 +91,9 @@ def analyze_properties(conn: sqlite3.Connection):
             print(f"{'Ville':18} | {'Nb biens':8} | {'Prix moyen (€)':14}")
             print("-" * 50)
             for r in rows:
-                print(f"{(r['city'] or '—'):18} | {r['n']:8} | {int(r['avg_price']) if r['avg_price'] is not None else '-':14}")
+                avg_price = r["avg_price"]
+                avg_str = int(avg_price) if avg_price is not None else "-"
+                print(f"{(r['city'] or '—'):18} | {r['n']:8} | {avg_str:14}")
 
         # Top 5 villes par volume de biens
         print_subtitle("Top 5 villes par nombre de biens")
@@ -111,6 +114,26 @@ def analyze_properties(conn: sqlite3.Connection):
             print("-" * 32)
             for r in rows:
                 print(f"{(r['city'] or '—'):18} | {r['n']:8}")
+
+        # Top 5 biens par surface
+        print_subtitle("Top 5 biens par surface")
+        cur.execute("""
+            SELECT title, city, surface, price
+            FROM properties
+            WHERE surface IS NOT NULL
+            ORDER BY surface DESC
+            LIMIT 5;
+        """)
+        rows = cur.fetchall()
+        if not rows:
+            print("Aucun bien avec surface renseignée.")
+        else:
+            print(f"{'Titre':30} | {'Ville':15} | {'Surface (m²)':12} | {'Prix (€)':12}")
+            print("-" * 80)
+            for r in rows:
+                title = (r["title"] or "")[:28] + ("…" if len(r["title"] or "") > 28 else "")
+                city = r["city"] or "—"
+                print(f"{title:30} | {city:15} | {r['surface']:12} | {int(r['price']):12}")
 
 
 def analyze_clients(conn: sqlite3.Connection):
@@ -154,8 +177,8 @@ def analyze_transactions(conn: sqlite3.Connection):
             print("Aucune transaction pour le moment.")
             return
 
-        # CA total et moyen
-        print_subtitle("Chiffre d'affaires")
+        # CA total et moyen (toutes opérations)
+        print_subtitle("Chiffre d'affaires (toutes opérations)")
         cur.execute("""
             SELECT 
                 SUM(price) AS total_revenue,
@@ -163,10 +186,27 @@ def analyze_transactions(conn: sqlite3.Connection):
             FROM transactions;
         """)
         r = cur.fetchone()
-        print(f"CA total : {int(r['total_revenue'])} €")
-        print(f"Prix moyen par transaction : {int(r['avg_price'])} €")
+        total_rev = r["total_revenue"] or 0
+        avg_price = r["avg_price"] or 0
+        print(f"CA total : {int(total_rev)} €")
+        print(f"Prix moyen par transaction : {int(avg_price)} €")
 
-        # Transactions par année (si tu mets des dates au format YYYY-MM-DD)
+        # CA total des VENTES uniquement
+        print_subtitle("Chiffre d'affaires des ventes (operation_type = 'vente')")
+        cur.execute("""
+            SELECT 
+                SUM(price) AS total_revenue,
+                ROUND(AVG(price), 0) AS avg_price
+            FROM transactions
+            WHERE operation_type = 'vente';
+        """)
+        r = cur.fetchone()
+        total_vente = r["total_revenue"] or 0
+        avg_vente = r["avg_price"] or 0
+        print(f"CA total ventes : {int(total_vente)} €")
+        print(f"Prix moyen par vente : {int(avg_vente)} €")
+
+        # Transactions par année (si dates au format YYYY-MM-DD)
         print_subtitle("Transactions par année (si date au format YYYY-MM-DD)")
         cur.execute("""
             SELECT SUBSTR(date, 1, 4) AS year,
@@ -184,11 +224,33 @@ def analyze_transactions(conn: sqlite3.Connection):
             print(f"{'Année':8} | {'Nb transac':10} | {'CA (€)':12}")
             print("-" * 38)
             for r in rows:
-                print(f"{(r['year'] or '—'):8} | {r['n']:10} | {int(r['revenue']) if r['revenue'] is not None else '-':12}")
+                rev = r["revenue"]
+                rev_str = int(rev) if rev is not None else "-"
+                print(f"{(r['year'] or '—'):8} | {r['n']:10} | {rev_str:12}")
+
+        # Répartition par type d'opération (vente / location)
+        print_subtitle("Répartition par type d'opération")
+        cur.execute("""
+            SELECT operation_type, COUNT(*) AS n, ROUND(AVG(price), 0) AS avg_price
+            FROM transactions
+            GROUP BY operation_type
+            ORDER BY n DESC;
+        """)
+        rows = cur.fetchall()
+        if not rows:
+            print("Aucune transaction enregistrée.")
+        else:
+            print(f"{'Type opé.':12} | {'Nb transac':10} | {'Prix moyen (€)':14}")
+            print("-" * 44)
+            for r in rows:
+                op = r["operation_type"] or "inconnu"
+                avg_price = r["avg_price"]
+                avg_str = int(avg_price) if avg_price is not None else "-"
+                print(f"{op:12} | {r['n']:10} | {avg_str:14}")
 
 
 def main():
-    print("=== YMmo — Analyse de la base de données ===")
+    print("=== Ymmo — Analyse de la base de données ===")
     print(f"Base : {DB_PATH}")
 
     try:

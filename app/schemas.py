@@ -65,6 +65,10 @@ class TransactionBase(BaseModel):
     client_id: int
     price: float
     date: str          # ex: "2026-06-10"
+
+    # type d'opération : vente ou location
+    operation_type: str  # "vente" ou "location"
+
     status: Optional[str] = "terminee"
 
 

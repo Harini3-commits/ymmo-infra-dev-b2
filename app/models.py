@@ -59,7 +59,9 @@ class Transaction(Base):
     client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
     price = Column(Float, nullable=False)
     date = Column(String, nullable=False)  # string rapide, ex "2026-06-10"
-    status = Column(String, default="terminee")  # terminee, en_cours, etc.
+
+    operation_type = Column(String, nullable=False)  # "vente" ou "location"
+    status = Column(String, default="terminee")      # terminee, en_cours, etc.
 
     # Relations vers Property et Client
     property = relationship("Property", back_populates="transactions")
