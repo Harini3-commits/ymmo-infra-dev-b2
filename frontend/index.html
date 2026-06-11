@@ -13,7 +13,6 @@
   />
 
   <style>
-  
     :root {
       --bg-body:      #F5F2EC;
       --bg-hero:      #F0E8DC;
@@ -260,7 +259,6 @@
       align-items: flex-start;
     }
 
-    /* ── CARD BASE ─────────────────────────────── */
     .card {
       background: var(--bg-card);
       border-radius: var(--radius-lg);
@@ -287,7 +285,6 @@
       color: var(--text-soft);
     }
 
-    /* ── MAP ───────────────────────────────────── */
     #map {
       width: 100%;
       height: 260px;
@@ -297,7 +294,6 @@
       border: 1px solid rgba(228,223,213,0.9);
     }
 
-    /* ── FORM ──────────────────────────────────── */
     .form {
       margin-top: 10px;
       display: grid;
@@ -387,7 +383,6 @@
       box-shadow: 0 10px 20px rgba(152,119,63,0.3);
     }
 
-    /* ── PROPERTIES GRID ───────────────────────── */
     .properties-header {
       display: flex;
       align-items: baseline;
@@ -546,7 +541,69 @@
       font-size: .86rem;
     }
 
-    /* ── MODAL DETAIL ──────────────────────────── */
+    /* actions sous chaque carte */
+    .property-actions {
+      display: flex;
+      gap: 6px;
+      padding: 8px 12px 10px;
+      border-top: 1px solid rgba(228,223,213,0.8);
+      background: rgba(255,255,255,0.9);
+    }
+
+    .btn-small {
+      border-radius: 999px;
+      border: 1px solid rgba(200,166,106,0.4);
+      background: #FDF9F1;
+      padding: 4px 9px;
+      font-size: .75rem;
+      cursor: pointer;
+      color: #4B5563;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-small-primary {
+      background: linear-gradient(135deg, #D3B57A, #C49859);
+      color: #2B2215;
+      border-color: rgba(200,166,106,0.8);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: .8rem;
+      color: var(--text-soft);
+    }
+
+    .filters select {
+      border-radius: 999px;
+      border: 1px solid rgba(228,223,213,0.9);
+      background: #F8F4EE;
+      padding: 4px 8px;
+      font-size: .8rem;
+    }
+
+    .filters button {
+      border-radius: 999px;
+      border: 1px solid rgba(228,223,213,0.9);
+      background: #FFF;
+      padding: 4px 10px;
+      font-size: .78rem;
+      cursor: pointer;
+      color: var(--text-soft);
+    }
+
+    .insights {
+      margin-top: 10px;
+      font-size: .8rem;
+      color: var(--text-soft);
+      display: grid;
+      gap: 2px;
+    }
+
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -724,7 +781,6 @@
       font-size: 16px;
     }
 
-    /* ── TOAST ──────────────────────────────────── */
     #toast {
       position: fixed;
       bottom: 26px;
@@ -748,7 +804,6 @@
       opacity: 1;
     }
 
-    /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 980px) {
       .hero {
         grid-template-columns: 1fr;
@@ -831,6 +886,12 @@
         <div class="chip">
           Carte interactive des biens
         </div>
+      </div>
+      <div class="insights">
+        <div>Biens au total : <span id="ins-total">0</span></div>
+        <div>À vendre : <span id="ins-avendre">0</span> • À louer : <span id="ins-alouer">0</span></div>
+        <div>Vendus : <span id="ins-vendus">0</span> • Loués : <span id="ins-loues">0</span></div>
+        <div>Prix moyen du portefeuille : <span id="ins-avgprice">0</span> €</div>
       </div>
     </div>
     <div class="hero-right">
@@ -962,6 +1023,23 @@
         <div class="card-title">Portefeuille de biens</div>
         <div class="properties-count" id="properties-count-label">0 bien</div>
       </div>
+
+      <!-- Filtres -->
+      <div class="filters">
+        <span>Filtrer par :</span>
+        <select id="filter-status">
+          <option value="all">Tous les statuts</option>
+          <option value="a_vendre">À vendre</option>
+          <option value="vendu">Vendu</option>
+          <option value="a_louer">À louer</option>
+          <option value="loue">Loué</option>
+        </select>
+        <select id="filter-city">
+          <option value="all">Toutes les villes</option>
+        </select>
+        <button id="filter-reset">Réinitialiser</button>
+      </div>
+
       <div id="properties-container">
         <div class="properties-empty">
           Aucun bien enregistré pour le moment. Ajoutez un premier bien à gauche pour constituer votre portefeuille.
@@ -1013,9 +1091,9 @@
 <script>
   const API_BASE = "http://127.0.0.1:8000";
 
+  let allProperties = [];
   let currentProperties = [];
 
-  /* ── UTILS ──────────────────────────────── */
   function fmt(n) {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
   }
@@ -1041,10 +1119,9 @@
       .replace(/"/g,'&quot;');
   }
 
-  /* ── MAP / LEAFLET ─────────────────────────── */
   let map = null;
   let markersLayer = null;
-  const propertyMarkers = new Map(); // id -> marker
+  const propertyMarkers = new Map();
 
   const CITY_COORDS = {
     "Lyon":        [45.7640, 4.8357],
@@ -1125,17 +1202,72 @@
     marker.openPopup();
   }
 
-  /* ── FETCH & RENDER PROPERTIES ──────────────── */
-  async function fetchProperties() {
+  async function loadProperties() {
     try {
       const res = await fetch(`${API_BASE}/properties/`);
       const data = await res.json();
+      allProperties = data;
       currentProperties = data;
-      renderProperties(data);
-      updateHeroKPIs(data);
+      updateCityFilterOptions(allProperties);
+      updateInsights();
+      applyFiltersAndRender();
     } catch (e) {
       console.error(e);
     }
+  }
+
+  function applyFiltersAndRender() {
+    const status = document.getElementById("filter-status").value;
+    const city = document.getElementById("filter-city").value;
+
+    let filtered = [...allProperties];
+
+    if (status !== "all") {
+      filtered = filtered.filter(p => p.status === status);
+    }
+    if (city !== "all") {
+      filtered = filtered.filter(p => p.city === city);
+    }
+
+    currentProperties = filtered;
+    renderProperties(filtered);
+  }
+
+  function updateCityFilterOptions(properties) {
+    const select = document.getElementById("filter-city");
+    const cities = Array.from(new Set(properties.map(p => p.city).filter(Boolean)));
+    select.innerHTML = '<option value="all">Toutes les villes</option>';
+    for (const city of cities) {
+      const opt = document.createElement("option");
+      opt.value = city;
+      opt.textContent = city;
+      select.appendChild(opt);
+    }
+  }
+
+  function updateInsights() {
+    const total = allProperties.length;
+    const aVendre = allProperties.filter(p => p.status === "a_vendre").length;
+    const aLouer = allProperties.filter(p => p.status === "a_louer").length;
+    const vendus = allProperties.filter(p => p.status === "vendu").length;
+    const loues = allProperties.filter(p => p.status === "loue").length;
+
+    let sumPrice = 0;
+    let countPrice = 0;
+    for (const p of allProperties) {
+      if (typeof p.price === "number" && !isNaN(p.price)) {
+        sumPrice += p.price;
+        countPrice += 1;
+      }
+    }
+    const avgPrice = countPrice > 0 ? Math.round(sumPrice / countPrice) : 0;
+
+    document.getElementById("ins-total").textContent = total;
+    document.getElementById("ins-avendre").textContent = aVendre;
+    document.getElementById("ins-alouer").textContent = aLouer;
+    document.getElementById("ins-vendus").textContent = vendus;
+    document.getElementById("ins-loues").textContent = loues;
+    document.getElementById("ins-avgprice").textContent = avgPrice.toLocaleString("fr-FR");
   }
 
   function renderProperties(data) {
@@ -1165,6 +1297,35 @@
 
     container.innerHTML = cardsHtml;
     updateMapMarkers(data);
+
+    // attacher les listeners sur les boutons d'action
+    data.forEach(p => {
+      const card = document.querySelector(`.property-card[data-id="${p.id}"]`);
+      if (!card) return;
+
+      const detailBtn = card.querySelector('[data-action="details"]');
+      const sellBtn = card.querySelector('[data-action="sell"]');
+      const rentBtn = card.querySelector('[data-action="rent"]');
+
+      if (detailBtn) {
+        detailBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDetail(p.id);
+        });
+      }
+      if (sellBtn) {
+        sellBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          markAsSold(p);
+        });
+      }
+      if (rentBtn) {
+        rentBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          markAsRented(p);
+        });
+      }
+    });
   }
 
   function renderPropertyCard(p) {
@@ -1194,8 +1355,18 @@
 
     const typeStr = p.type ? p.type.charAt(0).toUpperCase() + p.type.slice(1) : '';
 
+    // Actions disponibles
+    let actionSell = '';
+    let actionRent = '';
+    if (status === 'a_vendre') {
+      actionSell = '<button class="btn-small btn-small-primary" data-action="sell">Marquer comme vendu</button>';
+    }
+    if (status === 'a_louer') {
+      actionRent = '<button class="btn-small btn-small-primary" data-action="rent">Marquer comme loué</button>';
+    }
+
     return `
-      <article class="property-card ${cardStatusClass}" onclick="openDetail(${p.id})">
+      <article class="property-card ${cardStatusClass}" data-id="${p.id}">
         <div class="property-image-wrap">
           <img class="property-image" src="${escHtml(imageUrl)}" alt="" onerror="this.style.display='none';">
           <div class="property-pill">
@@ -1219,36 +1390,25 @@
             <div class="property-status-pill ${statusClass}">${statusLabel}</div>
           </div>
         </div>
+        <div class="property-actions">
+          <button class="btn-small" data-action="details">Détails</button>
+          ${actionSell}
+          ${actionRent}
+        </div>
       </article>
     `;
   }
 
-  function updateHeroKPIs(data) {
-    document.getElementById('kpi-total').textContent = data.length || '—';
-    if (!data.length) {
-      document.getElementById('kpi-avg').textContent = '—';
-      document.getElementById('kpi-villes').textContent = '—';
-      return;
-    }
-
-    const avg = data.reduce((s, p) => s + p.price, 0) / data.length;
-    document.getElementById('kpi-avg').textContent = fmtCompact(Math.round(avg)) + '€';
-    const villes = new Set(data.map(p => p.city)).size;
-    document.getElementById('kpi-villes').textContent = villes;
-  }
-
-  /* ── FETCH STATS ────────────────────────── */
   async function fetchStats() {
     try {
       const res = await fetch(`${API_BASE}/stats/`);
       const data = await res.json();
-      // Utilisable plus tard pour d'autres blocs
+      // utilisable plus tard
     } catch (e) {
       console.error(e);
     }
   }
 
-  /* ── SUBMIT ─────────────────────────────── */
   async function handleSubmit() {
     const title       = document.getElementById('title').value.trim();
     const city        = document.getElementById('city').value.trim();
@@ -1317,7 +1477,7 @@
       document.getElementById('description').value = '';
 
       showToast('Bien ajouté au portefeuille.');
-      fetchProperties();
+      await loadProperties();
       fetchStats();
     } catch {
       showToast('Erreur lors de l’ajout du bien.');
@@ -1327,7 +1487,48 @@
     }
   }
 
-  /* ── MODAL DETAIL ───────────────────────── */
+  async function createTransaction(property, operationType) {
+    const clientId = 1; // à adapter : id d'un client générique existant
+    const today = new Date().toISOString().slice(0, 10);
+
+    const body = {
+      property_id: property.id,
+      client_id: clientId,
+      price: property.price || 0,
+      date: today,
+      operation_type: operationType,
+      status: "terminee"
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/transactions/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        console.error("Erreur création transaction", await res.text());
+        showToast("Impossible de créer la transaction.");
+        return;
+      }
+
+      await loadProperties();
+      showToast(operationType === "vente" ? "Bien marqué comme vendu." : "Bien marqué comme loué.");
+    } catch (e) {
+      console.error(e);
+      showToast("Erreur lors de la création de la transaction.");
+    }
+  }
+
+  function markAsSold(property) {
+    createTransaction(property, "vente");
+  }
+
+  function markAsRented(property) {
+    createTransaction(property, "location");
+  }
+
   function openDetail(id) {
     const p = currentProperties.find(x => x.id === id);
     if (!p) return;
@@ -1410,9 +1611,16 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  /* ── INIT ───────────────────────────────── */
+  document.getElementById("filter-status").addEventListener("change", applyFiltersAndRender);
+  document.getElementById("filter-city").addEventListener("change", applyFiltersAndRender);
+  document.getElementById("filter-reset").addEventListener("click", () => {
+    document.getElementById("filter-status").value = "all";
+    document.getElementById("filter-city").value = "all";
+    applyFiltersAndRender();
+  });
+
   initMap();
-  fetchProperties();
+  loadProperties();
   fetchStats();
 </script>
 </body>
