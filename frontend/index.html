@@ -1259,7 +1259,6 @@
     }
   }
 
-  // >>> MODIF : on met aussi à jour les KPI du hero
   function updateInsights() {
     const total   = allProperties.length;
     const aVendre = allProperties.filter(p => p.status === "a_vendre").length;
@@ -1279,7 +1278,6 @@
 
     portfolioAvgPrice = avgPrice;
 
-    // Bloc texte à gauche
     document.getElementById("ins-total").textContent    = total;
     document.getElementById("ins-avendre").textContent  = aVendre;
     document.getElementById("ins-alouer").textContent   = aLouer;
