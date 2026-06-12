@@ -1,82 +1,227 @@
-<!-- home.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Ymmo — Accueil</title>
+  <title>Ymmo — Connexion</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- (optionnel) mêmes polices que le dashboard -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
+    *{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      margin:0;
+    body{
+      font-family: 'Inter', system-ui, sans-serif;
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      /* Image de fond locale */
       background-image:url("bg-agence.jpg");
       background-size:cover;
       background-position:center;
       background-repeat:no-repeat;
     }
 
-    /* Légère surcouche pour que le texte reste lisible */
-    .overlay {
+    .overlay{
       position:fixed;
       inset:0;
       background:rgba(15,23,42,0.45);
     }
 
-    .wrap {
+    .wrap{
       position:relative;
       z-index:1;
-      text-align:center;
-      padding:24px;
+      padding:26px 24px 24px;
       border-radius:18px;
-      background:#ffffffee; /* blanc légèrement transparent */
-      box-shadow:0 18px 45px rgba(31,41,51,.3);
+      background:#ffffffee;
+      box-shadow:0 18px 45px rgba(0,0,0,.3);
       max-width:420px;
+      width:100%;
     }
 
-    h1 {
+    .eyebrow{
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:#C49859;
+      margin-bottom:4px;
+      text-align:center;
+    }
+
+    h1{
       font-family:"DM Serif Display", serif;
-      margin-bottom:8px;
+      margin-bottom:10px;
+      font-size:1.6rem;
+      color:#111827;
+      text-align:center;
     }
 
-    p {
+    .subtitle{
       color:#6B7280;
-      font-size:.9rem;
-      margin-bottom:18px;
+      font-size:.85rem;
+      margin-bottom:16px;
+      text-align:center;
     }
 
-    button {
+    .tabs{
+      display:flex;
       border-radius:999px;
-      padding:10px 18px;
+      background:#F3F4F6;
+      padding:3px;
+      margin-bottom:14px;
+      font-size:.8rem;
+    }
+
+    .tab{
+      flex:1;
+      text-align:center;
+      padding:6px 0;
+      border-radius:999px;
+      cursor:pointer;
+      color:#6B7280;
+    }
+
+    .tab.active{
+      background:#ffffff;
+      color:#111827;
+      font-weight:500;
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      text-align:left;
+    }
+
+    label{
+      font-size:.78rem;
+      color:#6B7280;
+    }
+
+    input{
+      width:100%;
+      border-radius:999px;
+      border:1px solid #E5E7EB;
+      padding:8px 12px;
+      font-size:.85rem;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#C49859;
+      box-shadow:0 0 0 2px rgba(196,152,89,0.25);
+    }
+
+    button{
+      margin-top:4px;
+      border-radius:999px;
+      padding:9px 16px;
       border:none;
       background:linear-gradient(135deg,#D3B57A,#C49859);
       color:#2B2215;
       font-weight:600;
+      font-size:.9rem;
       cursor:pointer;
+      width:100%;
     }
 
-    button:hover {
+    button:hover{
       transform:translateY(-1px);
       box-shadow:0 14px 30px rgba(152,119,63,0.35);
+    }
+
+    .hint{
+      margin-top:6px;
+      font-size:.75rem;
+      color:#9CA3AF;
+    }
+
+    .hidden{
+      display:none;
     }
   </style>
 </head>
 <body>
   <div class="overlay"></div>
   <div class="wrap">
-    <h1>Ymmo • Portefeuille</h1>
-    <p>Accédez à votre interface de suivi des biens, transactions et carte interactive.</p>
-    <button onclick="window.location.href='index.html'">
-      Entrer dans le portefeuille
-    </button>
+    <div class="eyebrow">Ymmo • Portefeuille</div>
+    <h1>Espace conseiller immobilier</h1>
+    <p class="subtitle">
+      Connectez-vous ou créez un compte démo pour accéder au tableau de bord.
+    </p>
+
+    <!-- Onglets Connexion / Inscription -->
+    <div class="tabs">
+      <div class="tab active" id="tab-login" onclick="showLogin()">Connexion</div>
+      <div class="tab" id="tab-register" onclick="showRegister()">Inscription</div>
+    </div>
+
+    <!-- Formulaire de connexion -->
+    <form id="form-login" onsubmit="return fakeLogin(event)">
+      <div>
+        <label for="login-email">Identifiant</label>
+        <input type="text" id="login-email" placeholder="prenom.nom@ymmo.fr">
+      </div>
+      <div>
+        <label for="login-password">Mot de passe</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+      </div>
+      <button type="submit">Se connecter</button>
+      <div class="hint">
+        Démo : la connexion est simulée, n’importe quelles valeurs donnent accès au portefeuille.
+      </div>
+    </form>
+
+    <!-- Formulaire d'inscription (visuel) -->
+    <form id="form-register" class="hidden" onsubmit="return fakeRegister(event)">
+      <div>
+        <label for="reg-name">Nom complet</label>
+        <input type="text" id="reg-name" placeholder="Prénom Nom">
+      </div>
+      <div>
+        <label for="reg-email">Adresse e-mail professionnelle</label>
+        <input type="email" id="reg-email" placeholder="prenom.nom@ymmo.fr">
+      </div>
+      <div>
+        <label for="reg-password">Mot de passe</label>
+        <input type="password" id="reg-password" placeholder="Créer un mot de passe">
+      </div>
+      <button type="submit">Créer mon compte</button>
+      <div class="hint">
+        Démo : l’inscription est illustrative. En production, ces données seraient envoyées à l’API Ymmo.
+      </div>
+    </form>
   </div>
+
+  <script>
+    function showLogin(){
+      document.getElementById('form-login').classList.remove('hidden');
+      document.getElementById('form-register').classList.add('hidden');
+      document.getElementById('tab-login').classList.add('active');
+      document.getElementById('tab-register').classList.remove('active');
+    }
+
+    function showRegister(){
+      document.getElementById('form-register').classList.remove('hidden');
+      document.getElementById('form-login').classList.add('hidden');
+      document.getElementById('tab-register').classList.add('active');
+      document.getElementById('tab-login').classList.remove('active');
+    }
+
+    function fakeLogin(event){
+      event.preventDefault();
+      // Ici on pourrait plus tard appeler une vraie API d'authentification
+      window.location.href = 'index.html';
+      return false;
+    }
+
+    function fakeRegister(event){
+      event.preventDefault();
+      // Pour la démo : on pourrait stocker en localStorage, mais pas obligatoire
+      // Puis rediriger vers le dashboard
+      window.location.href = 'index.html';
+      return false;
+    }
+  </script>
 </body>
 </html>
