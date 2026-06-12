@@ -541,7 +541,6 @@
       font-size: .86rem;
     }
 
-    /* actions sous chaque carte */
     .property-actions {
       display: flex;
       gap: 6px;
@@ -804,7 +803,6 @@
       opacity: 1;
     }
 
-    /* Formulaire caché au départ */
     #add-property-card {
       display: none;
     }
@@ -869,7 +867,6 @@
 </header>
 
 <main>
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-left">
       <div class="eyebrow">Ymmo • Portefeuille</div>
@@ -893,7 +890,6 @@
         </div>
       </div>
 
-      <!-- Sous-titre + insights -->
       <div class="modal-section-title" style="margin-top: 10px; letter-spacing: .14em;">
         Vue synthétique du portefeuille
       </div>
@@ -904,7 +900,6 @@
         <div>Prix moyen du portefeuille : <span id="ins-avgprice">0</span> €</div>
       </div>
 
-      <!-- Bouton pour afficher / cacher le formulaire -->
       <button class="btn-primary" id="toggle-add-form" style="margin-top:12px;">
         + Ajouter un bien au portefeuille
       </button>
@@ -930,9 +925,7 @@
     </div>
   </section>
 
-  <!-- Carte + filtrage + biens sur une seule rangée -->
   <section class="section-row" style="margin-top: 24px;">
-    <!-- GAUCHE : CARTE -->
     <div>
       <div class="card">
         <div class="card-header">
@@ -945,14 +938,12 @@
       </div>
     </div>
 
-    <!-- DROITE : PROPERTIES GRID -->
     <div class="card">
       <div class="properties-header">
         <div class="card-title">Portefeuille de biens</div>
         <div class="properties-count" id="properties-count-label">0 bien</div>
       </div>
 
-      <!-- Filtres -->
       <div class="filters">
         <span>Filtrer par :</span>
         <select id="filter-status">
@@ -976,7 +967,6 @@
     </div>
   </section>
 
-  <!-- FORMULAIRE D'AJOUT, CACHÉ PAR DÉFAUT -->
   <section style="margin-top: 20px;">
     <div class="card" id="add-property-card">
       <div class="card-header">
@@ -986,6 +976,8 @@
         </div>
       </div>
       <div class="form">
+        <!-- formulaire identique -->
+        <!-- ... (tout ton formulaire comme avant) ... -->
         <div class="field">
           <label class="field-label">Titre du bien</label>
           <input class="input" type="text" id="title" placeholder="Appartement haussmannien, 6e — Vue Tour Eiffel">
@@ -1069,7 +1061,6 @@
 
 <div id="toast"></div>
 
-<!-- MODAL DETAIL -->
 <div class="modal-backdrop" id="detail-backdrop" onclick="backdropClick(event)">
   <div class="modal" id="detail-modal">
     <div class="modal-image-wrap">
@@ -1094,8 +1085,6 @@
         <div id="detail-availability"></div>
         <div class="modal-section-title" style="margin-top: 8px;">Localisation</div>
         <div class="modal-status-text" id="detail-location-text"></div>
-
-        <!-- Insight prix -->
         <div class="modal-section-title" style="margin-top: 8px;">Insight prix</div>
         <div class="modal-status-text">
           Prix vs moyenne du portefeuille :
@@ -1106,7 +1095,6 @@
   </div>
 </div>
 
-<!-- Leaflet JS -->
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -1118,7 +1106,7 @@
 
   let allProperties = [];
   let currentProperties = [];
-  let portfolioAvgPrice = 0; // prix moyen du portefeuille pour l'insight
+  let portfolioAvgPrice = 0;
 
   function fmt(n) {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
@@ -1244,7 +1232,7 @@
 
   function applyFiltersAndRender() {
     const status = document.getElementById("filter-status").value;
-    const city = document.getElementById("filter-city").value;
+    const city   = document.getElementById("filter-city").value;
 
     let filtered = [...allProperties];
 
@@ -1271,12 +1259,13 @@
     }
   }
 
+  // >>> MODIF : on met aussi à jour les KPI du hero
   function updateInsights() {
-    const total = allProperties.length;
+    const total   = allProperties.length;
     const aVendre = allProperties.filter(p => p.status === "a_vendre").length;
-    const aLouer = allProperties.filter(p => p.status === "a_louer").length;
-    const vendus = allProperties.filter(p => p.status === "vendu").length;
-    const loues = allProperties.filter(p => p.status === "loue").length;
+    const aLouer  = allProperties.filter(p => p.status === "a_louer").length;
+    const vendus  = allProperties.filter(p => p.status === "vendu").length;
+    const loues   = allProperties.filter(p => p.status === "loue").length;
 
     let sumPrice = 0;
     let countPrice = 0;
@@ -1290,17 +1279,30 @@
 
     portfolioAvgPrice = avgPrice;
 
-    document.getElementById("ins-total").textContent = total;
-    document.getElementById("ins-avendre").textContent = aVendre;
-    document.getElementById("ins-alouer").textContent = aLouer;
-    document.getElementById("ins-vendus").textContent = vendus;
-    document.getElementById("ins-loues").textContent = loues;
+    // Bloc texte à gauche
+    document.getElementById("ins-total").textContent    = total;
+    document.getElementById("ins-avendre").textContent  = aVendre;
+    document.getElementById("ins-alouer").textContent   = aLouer;
+    document.getElementById("ins-vendus").textContent   = vendus;
+    document.getElementById("ins-loues").textContent    = loues;
     document.getElementById("ins-avgprice").textContent = avgPrice.toLocaleString("fr-FR");
+
+    // KPI hero à droite
+    const kpiTotal  = document.getElementById("kpi-total");
+    const kpiAvg    = document.getElementById("kpi-avg");
+    const kpiVilles = document.getElementById("kpi-villes");
+
+    if (kpiTotal)  kpiTotal.textContent  = total || "—";
+    if (kpiAvg)    kpiAvg.textContent    = avgPrice ? fmt(avgPrice) : "—";
+
+    const citySet = new Set(allProperties.map(p => p.city).filter(Boolean));
+    if (kpiVilles) kpiVilles.textContent = citySet.size || "—";
   }
+  // <<< FIN MODIF
 
   function renderProperties(data) {
-    const container = document.getElementById('properties-container');
-    const countLabel = document.getElementById('properties-count-label');
+    const container   = document.getElementById('properties-container');
+    const countLabel  = document.getElementById('properties-count-label');
     const headerCount = document.getElementById('header-count');
 
     const countText = `${data.length} bien${data.length !== 1 ? 's' : ''}`;
@@ -1326,14 +1328,13 @@
     container.innerHTML = cardsHtml;
     updateMapMarkers(data);
 
-    // listeners sur les boutons d'action
     data.forEach(p => {
       const card = document.querySelector(`.property-card[data-id="${p.id}"]`);
       if (!card) return;
 
       const detailBtn = card.querySelector('[data-action="details"]');
-      const sellBtn = card.querySelector('[data-action="sell"]');
-      const rentBtn = card.querySelector('[data-action="rent"]');
+      const sellBtn   = card.querySelector('[data-action="sell"]');
+      const rentBtn   = card.querySelector('[data-action="rent"]');
 
       if (detailBtn) {
         detailBtn.addEventListener('click', (e) => {
@@ -1377,8 +1378,8 @@
     const imageUrl = p.image_url || 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg';
 
     const parts = [];
-    if (p.surface) parts.push(`${p.surface} m²`);
-    if (p.bedrooms) parts.push(`${p.bedrooms} ch.`);
+    if (p.surface)   parts.push(`${p.surface} m²`);
+    if (p.bedrooms)  parts.push(`${p.bedrooms} ch.`);
     if (p.bathrooms) parts.push(`${p.bathrooms} sdb`);
 
     const typeStr = p.type ? p.type.charAt(0).toUpperCase() + p.type.slice(1) : '';
@@ -1430,7 +1431,6 @@
     try {
       const res = await fetch(`${API_BASE}/stats/`);
       const data = await res.json();
-      // utilisable plus tard
     } catch (e) {
       console.error(e);
     }
@@ -1515,7 +1515,7 @@
   }
 
   async function createTransaction(property, operationType) {
-    const clientId = 1; // à adapter : id d'un client générique existant
+    const clientId = 1;
     const today = new Date().toISOString().slice(0, 10);
 
     const body = {
@@ -1619,7 +1619,6 @@
       locText.textContent = "Aucune information de localisation n’est renseignée.";
     }
 
-    // Insight prix vs moyenne du portefeuille
     const ecartSpan = document.getElementById('detail-price-insight');
     if (ecartSpan) {
       if (portfolioAvgPrice > 0 && typeof p.price === 'number') {
@@ -1651,7 +1650,6 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  // Filtres
   document.getElementById("filter-status").addEventListener("change", applyFiltersAndRender);
   document.getElementById("filter-city").addEventListener("change", applyFiltersAndRender);
   document.getElementById("filter-reset").addEventListener("click", () => {
@@ -1660,9 +1658,8 @@
     applyFiltersAndRender();
   });
 
-  // Toggle formulaire
   const toggleBtn = document.getElementById("toggle-add-form");
-  const addCard = document.getElementById("add-property-card");
+  const addCard  = document.getElementById("add-property-card");
   if (toggleBtn && addCard) {
     toggleBtn.addEventListener("click", () => {
       const isHidden = addCard.style.display === "none" || addCard.style.display === "";
